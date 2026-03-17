@@ -324,7 +324,47 @@
             color: #003c8f;
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* ===== INAYOS NA GRANTING AUTHORITY - PIRMA SA ITAAS, NAME SA IBABA ===== */
+        .granting-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .granting-signature-img {
+            max-width: 300px;
+            max-height: 80px;
+            margin-bottom: 15px;
+            border: 2px solid #003c8f;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .granting-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #003c8f;
+            margin: 5px 0;
+            padding: 8px 15px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #1976d2;
+            width: 100%;
+            text-align: center;
+        }
+
+        .granting-date {
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9rem;
+            font-style: italic;
         }
 
         .verified-badge {
@@ -665,12 +705,13 @@
                 font-size: 0.9rem !important;
             }
 
-            .granting-section p {
-                font-size: 0.75rem !important;
+            .granting-section img {
+                max-height: 40px !important;
             }
 
-            .granting-section img {
-                max-height: 30px !important;
+            .granting-name {
+                font-size: 0.9rem !important;
+                padding: 5px !important;
             }
         }
     </style>
@@ -888,16 +929,26 @@
                 
                 html += '</table>';
                 
+                // ===== INAYOS NA GRANTING AUTHORITY =====
                 if (data.grantingName || data.grantingSignature) {
                     html += '<div class="granting-section">';
                     html += '<div class="granting-title">GRANTING AUTHORITY</div>';
-                    html += '<p><strong>' + (data.grantingName || 'N/A') + '</strong></p>';
+                    html += '<div class="granting-container">';
+                    
+                    // PIRMA - NASA ITAAS
                     if (data.grantingSignature) {
-                        html += `<img src="${data.grantingSignature}" class="signature-img">`;
+                        html += `<img src="${data.grantingSignature}" class="granting-signature-img" alt="Granting Signature">`;
                     }
+                    
+                    // NAME - NASA IBABA
+                    html += '<div class="granting-name">' + (data.grantingName || 'N/A') + '</div>';
+                    
+                    // DATE
                     if (data.grantingDate) {
-                        html += '<p><strong>Date:</strong> ' + data.grantingDate + '</p>';
+                        html += '<div class="granting-date">Date: ' + data.grantingDate + '</div>';
                     }
+                    
+                    html += '</div>';
                     html += '</div>';
                 }
                 
