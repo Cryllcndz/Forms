@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSS Company Representative Authorization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <div class="header-with-logo">
+            <div class="logo-container">
+                <img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='SSS';">
+            </div>
+            <div class="sss-header">
+                <h1>Social Security System</h1>
+                <div class="branch">EASTWOOD BRANCH</div>
+                <div class="address">187 ABQ Building, E. Rodriguez Jr. Ave., Bagumbayan, QC</div>
+                <div class="tel">Tel. Nos.: 8351-1605; 8351-1623</div>
+            </div>
+        </div>
+
+        <div class="form-title">
+            <h2>COMPANY REPRESENTATIVE AUTHORIZATION CARD</h2>
+        </div>
+
+        <fieldset>
+            <div class="employer-header">
+                <div class="employer-fields">
+                    <table class="info-table">
+                        <tr>
+                            <td>EMPLOYER NAME:</td>
+                            <td><input type="text" id="employerName" placeholder="Enter employer name" required></td>
+                        </tr>
+                        <tr>
+                            <td>EMPLOYER ID NO.:</td>
+                            <td><input type="text" id="employerId" placeholder="00-0000000-0" required></td>
+                        </tr>
+                        <tr>
+                            <td>ADDRESS:</td>
+                            <td><input type="text" id="address" placeholder="Complete address" required></td>
+                        </tr>
+                        <tr>
+                            <td>TELEPHONE NO.:</td>
+                            <td><input type="text" id="telephone" placeholder="+63 XXX XXX XXXX" required></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="photo-section">
+                    <div class="photo-label">PHOTO 1x1</div>
+                    <div class="photo-box" id="photoBox">
+                        <img id="photoPreview" class="photo-preview" src="#" alt="1x1 Photo">
+                        <div class="photo-placeholder" id="photoPlaceholder">
+                            <i>📷</i>
+                            <span>No image</span>
+                        </div>
+                    </div>
+                    <input type="file" id="photoInput" class="photo-input" accept="image/*" capture="environment">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('photoInput').click()">Upload Photo</button>
+                    <div id="photoError" class="error-message">Please upload a 1x1 photo</div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="authorization-text">
+            <p>This is to certify that Mr./Ms. <input type="text" class="inline-input" id="certName" placeholder="Full Name" required> with SS # <input type="text" class="inline-input" id="ssNumber" placeholder="00-0000000-0" required> whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company's employees.</p>
+            <br>
+            <p>This Certification shall be valid within one (1) year from the date of issuance unless otherwise revoked and the SSS Eastwood Branch duly notified.</p>
+        </div>
+
+        <div class="signatures-side-by-side">
+            <div class="signature-item">
+                <div class="signature-label">SPECIMEN SIGNATURE</div>
+                <div class="signature-container">
+                    <canvas class="signature-canvas" id="specimenSignature1" width="400" height="80"></canvas>
+                    <div class="signature-actions">
+                        <button type="button" class="sign-btn" onclick="openModal('specimenSignature1')">Sign</button>
+                        <button type="button" class="clear-btn" onclick="clearCanvas('specimenSignature1')">Clear</button>
+                    </div>
+                </div>
+                <input type="text" class="name-input" id="specimenName1" placeholder="Type full name" required>
+                <div id="specimenError1" class="error-message">Signature and name are required</div>
+            </div>
+
+            <div class="signature-item">
+                <div class="signature-label">SIGNATURE OVER PRINTED NAME</div>
+                <div class="signature-container">
+                    <canvas class="employer-canvas" id="employerSignature" width="400" height="80"></canvas>
+                    <div class="signature-actions">
+                        <button type="button" class="sign-btn" onclick="openModal('employerSignature')">Sign</button>
+                        <button type="button" class="clear-btn" onclick="clearCanvas('employerSignature')">Clear</button>
+                    </div>
+                </div>
+                <input type="text" class="name-input" id="employerName2" placeholder="Type full name of Employer/Owner" required>
+                <div id="employerError" class="error-message">Signature and name are required</div>
+            </div>
+        </div>
+
+        <div class="noted-section">
+            <div class="noted-label" style="font-weight: 600; color: #003c8f; margin-bottom: 5px;">Noted by:</div>
+            <br>
+            <div class="noted-line"></div>
+            <div class="noted-name">ELEANOR F. DEATO</div>
+            <div class="noted-title">Branch Head</div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="primary-btn" type="button" id="nextBtn" onclick="goToSecondForm()">NEXT: SPECIMEN SIGNATURE CARD</button>
+        </div>
+    </div>
+
+    <div id="signatureModal" class="modal">
+        <div class="modal-content">
+            <h3>Draw Your Signature</h3>
+            <canvas id="modalCanvas" class="modal-canvas" width="400" height="200"></canvas>
+            <div class="modal-buttons">
+                <button class="modal-btn clear-btn" onclick="clearModalCanvas()">Clear</button>
+                <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn save-btn" onclick="saveSignature()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

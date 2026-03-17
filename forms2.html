@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SSS Specimen Signature Card</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        .register-instruction-popup .popup-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .register-instruction-popup .instruction-list {
+            margin: 0;
+        }
+        
+        .register-instruction-popup .important-note {
+            margin: 15px 0 0;
+        }
+
+        /* QR Link Styles */
+        .qr-link-container {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border: 1px solid #cfe3ff;
+            text-align: center;
+        }
+
+        .qr-link-label {
+            font-weight: 600;
+            color: #003c8f;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .qr-link {
+            word-break: break-all;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #1976d2;
+            font-size: 0.85rem;
+            color: #1976d2;
+            text-decoration: none;
+            display: inline-block;
+            max-width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .qr-link:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(25, 118, 210, 0.2);
+        }
+
+        .qr-link i {
+            margin-right: 5px;
+        }
+
+        .qr-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Dark mode support */
+        body.dark-mode .qr-link-container {
+            background: #2a2a3a;
+            border-color: #3d3d5a;
+        }
+
+        body.dark-mode .qr-link {
+            background: #1e1e2f;
+            border-color: #4a9eff;
+            color: #6cb2ff;
+        }
+
+        body.dark-mode .qr-link:hover {
+            background: #2d2d44;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="republic-header">
+            <div class="header-with-logo">
+                <div class="logo-container">
+                    <img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='SSS';">
+                </div>
+                <h1>Republic of the Philippines</h1>
+                <h2>SOCIAL SECURITY SYSTEM</h2>
+                <div class="form-number">SSS Form L - 501 (07-94)</div>
+            </div>
+        </div>
+
+        <div class="form-title">
+            <h2>SPECIMEN SIGNATURE CARD</h2>
+        </div>
+
+        <table class="info-table">
+            <tr>
+                <td>Registered Employer Name</td>
+                <td><input type="text" id="registeredName" readonly></td>
+            </tr>
+            <tr>
+                <td>I.D. No.</td>
+                <td><input type="text" id="idNumber" readonly></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><input type="text" id="companyAddress" readonly></td>
+            </tr>
+            <tr>
+                <td>Tel. No.</td>
+                <td><input type="text" id="telNumber" readonly></td>
+            </tr>
+        </table>
+
+        <div class="authorization-text">
+            <p>Authority to certify or sign documents on all social security matters is hereby delegated to the following officials of the company.</p>
+        </div>
+
+        <table class="officials-table">
+            <thead>
+                <tr>
+                    <th>Printed Name</th>
+                    <th>Designation</th>
+                    <th>Initial</th>
+                    <th>Signature</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" id="officialName1" placeholder="Full Name" required></td>
+                    <td><input type="text" id="officialDesignation1" placeholder="Designation" required></td>
+                    <td><input type="text" id="officialInitial1" placeholder="Initial" required></td>
+                    <td>
+                        <canvas class="signature-canvas-small" id="officialSignature1" width="150" height="60"></canvas>
+                        <div class="signature-actions-small">
+                            <button type="button" class="sign-btn-small" onclick="openModal('officialSignature1')">Sign</button>
+                            <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature1')">Clear</button>
+                        </div>
+                        <div id="officialError1" class="error-message">Signature required</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="officialName2" placeholder="Full Name" required></td>
+                    <td><input type="text" id="officialDesignation2" placeholder="Designation" required></td>
+                    <td><input type="text" id="officialInitial2" placeholder="Initial" required></td>
+                    <td>
+                        <canvas class="signature-canvas-small" id="officialSignature2" width="150" height="60"></canvas>
+                        <div class="signature-actions-small">
+                            <button type="button" class="sign-btn-small" onclick="openModal('officialSignature2')">Sign</button>
+                            <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature2')">Clear</button>
+                        </div>
+                        <div id="officialError2" class="error-message">Signature required</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="officialName3" placeholder="Full Name" required></td>
+                    <td><input type="text" id="officialDesignation3" placeholder="Designation" required></td>
+                    <td><input type="text" id="officialInitial3" placeholder="Initial" required></td>
+                    <td>
+                        <canvas class="signature-canvas-small" id="officialSignature3" width="150" height="60"></canvas>
+                        <div class="signature-actions-small">
+                            <button type="button" class="sign-btn-small" onclick="openModal('officialSignature3')">Sign</button>
+                            <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature3')">Clear</button>
+                        </div>
+                        <div id="officialError3" class="error-message">Signature required</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="granting-section">
+            <div class="granting-title">Name and official capacity of person granting authority</div>
+            <div class="granting-container">
+                <div class="granting-signature">
+                    <input type="text" id="grantingName" placeholder="Full name and position" style="width: 100%; padding: 8px; margin-bottom: 10px;" required>
+                    <canvas class="granting-canvas" id="grantingSignature" width="400" height="80"></canvas>
+                    <div class="signature-actions-small" style="justify-content: center;">
+                        <button type="button" class="sign-btn-small" onclick="openModal('grantingSignature')">Sign</button>
+                        <button type="button" class="clear-btn-small" onclick="clearCanvas('grantingSignature')">Clear</button>
+                    </div>
+                    <div class="granting-label">(Please sign over printed name.)</div>
+                    <div id="grantingError" class="error-message">Signature required</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="date-section">
+            <div class="date-label">Date authority granted:</div>
+            <input type="date" id="grantingDate" class="date-input" required>
+        </div>
+
+        <div class="bottom-actions">
+            <div class="qr-section">
+                <h3>📱 OFFICIAL QR CODE</h3>
+                <div class="qr-code" id="qrCodeBox">
+                    <canvas id="qrCanvas" width="180" height="180"></canvas>
+                    <div class="qr-placeholder" id="qrPlaceholder">
+                        <i>📷</i>
+                        <span>Complete form<br>to generate QR</span>
+                    </div>
+                </div>
+                
+                <!-- QR LINK CONTAINER -->
+                <div class="qr-link-container" id="qrLinkContainer" style="display: none;">
+                    <div class="qr-link-label">🔗 DIRECT LINK (for PC users):</div>
+                    <a href="#" id="qrLink" class="qr-link" target="_blank">
+                        <i>🔗</i> Click here to view form summary
+                    </a>
+                    <div class="qr-note">Same content as scanning the QR code</div>
+                </div>
+                
+                <div class="save-section" id="saveSection" style="display: none;">
+                    <button class="save-btn" onclick="saveQRCode()">
+                        <span>💾</span> SAVE QR CODE
+                    </button>
+                </div>
+                
+                <div id="qrSuccess" class="success-message">✓ Uploaded to cloud! QR Code ready.</div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="primary-btn" type="button" id="submitBtn" onclick="submitSecondForm()">
+                    GENERATE QR CODE
+                </button>
+                
+                <button class="back-btn" onclick="goBackToIndex()">
+                    <span>←</span> BACK TO COMPANY REP AUTHORIZATION
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerInstructionPopup" class="popup-overlay" style="display: none;">
+        <div class="popup-content instruction-popup register-instruction-popup">
+            <div class="popup-header">
+                <h3>📋 IMPORTANT INFORMATION / INSTRUCTIONS</h3>
+                <button class="popup-close" onclick="closeRegisterInstruction()">✕</button>
+            </div>
+            <div class="popup-body">
+                <ul class="instruction-list">
+                    <li>
+                        <span class="instruction-number">1</span>
+                        <div class="instruction-text">
+                            <strong>Form L-501</strong> should be accomplished in <strong>two (2) copies</strong> by the responsible officials authorized by the employer to certify and/or sign documents on the Social Security System (SSS).
+                        </div>
+                    </li>
+                    <li>
+                        <span class="instruction-number">2</span>
+                        <div class="instruction-text">
+                            Any signature in the space for <strong>"Employer's Representative"</strong> in salary and calamity application forms shall not be honored unless signatures appear in this form and are filed with the SSS.
+                        </div>
+                    </li>
+                    <li>
+                        <span class="instruction-number">3</span>
+                        <div class="instruction-text">
+                            The SSS should be notified of any <strong>change/revocation or addition</strong> in authorized representative through the submission of a new specimen signature card to replace or supplement that on file with the SSS.
+                        </div>
+                    </li>
+                    <li>
+                        <span class="instruction-number">4</span>
+                        <div class="instruction-text">
+                            The <strong>registered name, ID number and address</strong> of the employer should be correctly indicated in this form.
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="important-note">
+                    <h4>⚠️ IMPORTANT REMINDER</h4>
+                    <p>Make sure to accomplish all fields and provide specimen signatures of all authorized representatives. Incomplete forms will not be processed by SSS.</p>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="primary-btn" onclick="closeRegisterInstruction()">GOT IT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="signatureModal" class="modal">
+        <div class="modal-content">
+            <h3>Draw Your Signature</h3>
+            <canvas id="modalCanvas" class="modal-canvas" width="400" height="200"></canvas>
+            <div class="modal-buttons">
+                <button class="modal-btn clear-btn" onclick="clearModalCanvas()">Clear</button>
+                <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn save-btn" onclick="saveSignature()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>
