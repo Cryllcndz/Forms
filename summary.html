@@ -760,7 +760,7 @@
                 html += '<div class="photo-label">1x1 PHOTO</div>';
                 html += '<div class="photo-frame">';
                 if (data.photo && data.photo !== '#' && data.photo !== '') {
-                    html += <img src="${data.photo}" alt="1x1 Photo">;
+                    html += `<img src="${data.photo}" alt="1x1 Photo">`;
                 } else {
                     html += '<div class="photo-placeholder">No image</div>';
                 }
@@ -779,7 +779,7 @@
                 if (data.specimenSignature1) {
                     html += '<div class="signature-box">';
                     html += '<h4>SPECIMEN SIGNATURE</h4>';
-                    html += <img src="${data.specimenSignature1}" class="signature-img">;
+                    html += `<img src="${data.specimenSignature1}" class="signature-img">`;
                     html += '<div class="signature-name">' + (data.specimenName1 || '') + '</div>';
                     html += '</div>';
                 }
@@ -787,7 +787,7 @@
                 if (data.employerSignature) {
                     html += '<div class="signature-box">';
                     html += '<h4>SIGNATURE OVER PRINTED NAME</h4>';
-                    html += <img src="${data.employerSignature}" class="signature-img">;
+                    html += `<img src="${data.employerSignature}" class="signature-img">`;
                     html += '<div class="signature-name">' + (data.employerName2 || data.employerName || '') + '</div>';
                     html += '</div>';
                 }
@@ -848,7 +848,7 @@
                     html += '<td>' + (data.officialInitial1 || '') + '</td>';
                     html += '<td>';
                     if (data.officialSignature1) {
-                        html += <img src="${data.officialSignature1}" class="official-signature-img">;
+                        html += `<img src="${data.officialSignature1}" class="official-signature-img">`;
                     } else {
                         html += 'No signature';
                     }
@@ -863,7 +863,7 @@
                     html += '<td>' + (data.officialInitial2 || '') + '</td>';
                     html += '<td>';
                     if (data.officialSignature2) {
-                        html += <img src="${data.officialSignature2}" class="official-signature-img">;
+                        html += `<img src="${data.officialSignature2}" class="official-signature-img">`;
                     } else {
                         html += 'No signature';
                     }
@@ -878,7 +878,7 @@
                     html += '<td>' + (data.officialInitial3 || '') + '</td>';
                     html += '<td>';
                     if (data.officialSignature3) {
-                        html += <img src="${data.officialSignature3}" class="official-signature-img">;
+                        html += `<img src="${data.officialSignature3}" class="official-signature-img">`;
                     } else {
                         html += 'No signature';
                     }
@@ -893,7 +893,7 @@
                     html += '<div class="granting-title">GRANTING AUTHORITY</div>';
                     html += '<p><strong>' + (data.grantingName || 'N/A') + '</strong></p>';
                     if (data.grantingSignature) {
-                        html += <img src="${data.grantingSignature}" class="signature-img">;
+                        html += `<img src="${data.grantingSignature}" class="signature-img">`;
                     }
                     if (data.grantingDate) {
                         html += '<p><strong>Date:</strong> ' + data.grantingDate + '</p>';
