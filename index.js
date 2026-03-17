@@ -365,7 +365,7 @@ function goToSecondForm() {
         showPopup('First form completed! Proceeding to instructions...', 'success', 'SUCCESS!');
         
         setTimeout(() => {
-            window.location.href = 'register.html';
+            window.location.href = 'forms2.html';
         }, 2000);
     } else {
         showPopup('Please fill in all required fields and complete all signatures.', 'error');
