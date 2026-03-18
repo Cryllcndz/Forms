@@ -10,6 +10,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+const EMAILJS_PUBLIC_KEY = "CysQ3fwtKbTZZSppu";
+const EMAILJS_SERVICE_ID = "service_o52hc72";
+const EMAILJS_TEMPLATE_ID = "template_8akdn4j";
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
 let firstFormData = null;
 let currentSubmissionId = null;
 
@@ -324,7 +330,7 @@ function validateSecondForm() {
             isValid = false;
             emailField.style.borderColor = '#f44336';
             emailField.classList.add('error');
-            alert('Please enter a valid email address');
+            showPopup('Please enter a valid email address', 'error');
         } else {
             emailField.style.borderColor = '#003c8f';
             emailField.classList.remove('error');
@@ -455,7 +461,7 @@ async function generateQRCodeAndSendEmail() {
             });
         }
         
-        sendEmailWithQR(email, summaryUrl);
+        await sendEmailWithQR(email, summaryUrl);
         
         console.log("✅ Form submitted and email sent!");
         return summaryUrl;
@@ -465,28 +471,34 @@ async function generateQRCodeAndSendEmail() {
     }
 }
 
-function sendEmailWithQR(email, summaryUrl) {
-    const subject = encodeURIComponent('SSS Form Submission - ' + currentSubmissionId);
-    const body = encodeURIComponent(
-        'Thank you for completing the SSS form.\n\n' +
-        'Your form has been successfully submitted.\n\n' +
-        'You can view your form using this link:\n' +
-        summaryUrl + '\n\n' +
-        'Submission ID: ' + currentSubmissionId + '\n' +
-        'Date: ' + new Date().toLocaleString() + '\n\n' +
-        'You can present this email or the QR code at the SSS office.\n\n' +
-        '--\n' +
-        'This is an automated message from SSS System.'
-    );
+async function sendEmailWithQR(email, summaryUrl) {
+    const templateParams = {
+        to_email: email,
+        to_name: email.split('@')[0],
+        from_name: "SSS System",
+        qr_link: summaryUrl,
+        submission_id: currentSubmissionId,
+        date_sent: new Date().toLocaleString(),
+        message: "Thank you for completing the SSS form. Your form has been successfully submitted."
+    };
     
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-    
-    const qrSuccess = document.getElementById('qrSuccess');
-    if (qrSuccess) {
-        qrSuccess.style.display = 'block';
-        setTimeout(() => {
-            qrSuccess.style.display = 'none';
-        }, 5000);
+    try {
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        console.log("✅ Email sent successfully!", response);
+        
+        const qrSuccess = document.getElementById('qrSuccess');
+        if (qrSuccess) {
+            qrSuccess.style.display = 'block';
+            qrSuccess.innerHTML = '✓ Email sent successfully to ' + email;
+            setTimeout(() => {
+                qrSuccess.style.display = 'none';
+            }, 5000);
+        }
+        
+        return response;
+    } catch (error) {
+        console.error("❌ Email error:", error);
+        throw new Error("Failed to send email. Please try again.");
     }
 }
 
