@@ -11,6 +11,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 let firstFormData = null;
+let currentSubmissionId = null;
 
 function sanitizeData(data) {
     if (data === null || data === undefined) {
@@ -92,15 +93,7 @@ window.addEventListener('load', function() {
     ];
     canvases.forEach(id => clearCanvas(id));
     
-    document.getElementById('qrCanvas').style.display = 'none';
-    document.getElementById('qrPlaceholder').style.display = 'block';
-    document.getElementById('saveSection').style.display = 'none';
     document.getElementById('qrSuccess').style.display = 'none';
-    
-    const linkContainer = document.getElementById('qrLinkContainer');
-    if (linkContainer) {
-        linkContainer.style.display = 'none';
-    }
     
     setTimeout(() => {
         showRegisterInstruction();
@@ -269,6 +262,11 @@ function stopDrawing() {
     isDrawing = false;
 }
 
+function isValidEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
 function validateSecondForm() {
     let isValid = true;
     
@@ -280,14 +278,22 @@ function validateSecondForm() {
         if (!nameField.value.trim()) {
             isValid = false;
             nameField.style.borderColor = '#f44336';
+        } else {
+            nameField.style.borderColor = '#ccc';
         }
+        
         if (!desigField.value.trim()) {
             isValid = false;
             desigField.style.borderColor = '#f44336';
+        } else {
+            desigField.style.borderColor = '#ccc';
         }
+        
         if (!initialField.value.trim()) {
             isValid = false;
             initialField.style.borderColor = '#f44336';
+        } else {
+            initialField.style.borderColor = '#ccc';
         }
     }
     
@@ -295,23 +301,50 @@ function validateSecondForm() {
     if (!grantingName.value.trim()) {
         isValid = false;
         grantingName.style.borderColor = '#f44336';
+    } else {
+        grantingName.style.borderColor = '#003c8f';
     }
     
     const grantingDate = document.getElementById('grantingDate');
     if (!grantingDate.value) {
         isValid = false;
         grantingDate.style.borderColor = '#f44336';
+    } else {
+        grantingDate.style.borderColor = '#999';
+    }
+    
+    const emailField = document.getElementById('recipientEmail');
+    if (emailField) {
+        const email = emailField.value.trim();
+        if (!email) {
+            isValid = false;
+            emailField.style.borderColor = '#f44336';
+            emailField.classList.add('error');
+        } else if (!isValidEmail(email)) {
+            isValid = false;
+            emailField.style.borderColor = '#f44336';
+            emailField.classList.add('error');
+            alert('Please enter a valid email address');
+        } else {
+            emailField.style.borderColor = '#003c8f';
+            emailField.classList.remove('error');
+        }
     }
     
     for (let i = 1; i <= 3; i++) {
         if (!canvasSigned[`officialSignature${i}`]) {
             isValid = false;
             document.getElementById(`officialError${i}`).style.display = 'block';
+        } else {
+            document.getElementById(`officialError${i}`).style.display = 'none';
         }
     }
+    
     if (!canvasSigned.grantingSignature) {
         isValid = false;
         document.getElementById('grantingError').style.display = 'block';
+    } else {
+        document.getElementById('grantingError').style.display = 'none';
     }
     
     return isValid;
@@ -335,11 +368,19 @@ async function uploadToFirebase(allData) {
     }
 }
 
-let currentSubmissionId = null;
-
-async function generateQRCode() {
+async function generateQRCodeAndSendEmail() {
     if (!firstFormData) {
         throw new Error("No first form data found. Please complete first form.");
+    }
+    
+    const emailField = document.getElementById('recipientEmail');
+    if (!emailField) {
+        throw new Error("Email field not found");
+    }
+    
+    const email = emailField.value.trim();
+    if (!email) {
+        throw new Error("Email address is required");
     }
     
     const allData = {
@@ -378,6 +419,7 @@ async function generateQRCode() {
         grantingName: document.getElementById('grantingName').value || '',
         grantingSignature: document.getElementById('grantingSignature').toDataURL() || '',
         grantingDate: document.getElementById('grantingDate').value || '',
+        recipientEmail: email,
         
         timestamp: new Date().toISOString()
     };
@@ -399,52 +441,53 @@ async function generateQRCode() {
         const baseUrl = window.location.href.split('?')[0].replace('register.html', '');
         const summaryUrl = baseUrl + 'summary.html?id=' + currentSubmissionId;
         
-        console.log("⏳ Generating QR Code for:", summaryUrl);
+        console.log("⏳ Generating QR Code...");
         
         const qrCanvas = document.getElementById('qrCanvas');
-        await QRCode.toCanvas(qrCanvas, summaryUrl, {
-            width: 200,
-            margin: 2,
-            color: {
-                dark: '#003c8f',
-                light: '#ffffff'
-            }
-        });
-        
-        qrCanvas.style.display = 'block';
-        document.getElementById('qrPlaceholder').style.display = 'none';
-        document.getElementById('saveSection').style.display = 'block';
-        document.getElementById('qrSuccess').style.display = 'block';
-        
-        const qrLink = document.getElementById('qrLink');
-        const qrLinkContainer = document.getElementById('qrLinkContainer');
-        
-        if (qrLink && qrLinkContainer) {
-            qrLink.href = summaryUrl;
-            qrLinkContainer.style.display = 'block';
-            console.log("✅ Link displayed:", summaryUrl);
+        if (qrCanvas) {
+            await QRCode.toCanvas(qrCanvas, summaryUrl, {
+                width: 300,
+                margin: 2,
+                color: {
+                    dark: '#003c8f',
+                    light: '#ffffff'
+                }
+            });
         }
         
-        console.log("✅ QR Code generated successfully!");
+        sendEmailWithQR(email, summaryUrl);
+        
+        console.log("✅ Form submitted and email sent!");
         return summaryUrl;
     } catch (error) {
-        console.error('❌ Error in generateQRCode:', error);
+        console.error('❌ Error:', error);
         throw error;
     }
 }
 
-function saveQRCode() {
-    const qrCanvas = document.getElementById('qrCanvas');
-    const now = new Date();
-    const dateStr = now.toISOString().slice(0,10);
-    const filename = `SSS-QR-${dateStr}-${currentSubmissionId}.png`;
+function sendEmailWithQR(email, summaryUrl) {
+    const subject = encodeURIComponent('SSS Form Submission - ' + currentSubmissionId);
+    const body = encodeURIComponent(
+        'Thank you for completing the SSS form.\n\n' +
+        'Your form has been successfully submitted.\n\n' +
+        'You can view your form using this link:\n' +
+        summaryUrl + '\n\n' +
+        'Submission ID: ' + currentSubmissionId + '\n' +
+        'Date: ' + new Date().toLocaleString() + '\n\n' +
+        'You can present this email or the QR code at the SSS office.\n\n' +
+        '--\n' +
+        'This is an automated message from SSS System.'
+    );
     
-    const link = document.createElement('a');
-    link.download = filename;
-    link.href = qrCanvas.toDataURL('image/png');
-    link.click();
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
     
-    showPopup('✅ QR CODE SAVED!\n\nFile: ' + filename + '\n\nPresent this QR code at the SSS office.', 'success', 'DOWNLOADED');
+    const qrSuccess = document.getElementById('qrSuccess');
+    if (qrSuccess) {
+        qrSuccess.style.display = 'block';
+        setTimeout(() => {
+            qrSuccess.style.display = 'none';
+        }, 5000);
+    }
 }
 
 function showPopup(message, type = 'info', title = '', autoClose = false) {
@@ -511,16 +554,22 @@ async function submitSecondForm() {
     }
     
     const submitBtn = document.getElementById('submitBtn');
+    const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Uploading to Cloud... <span class="loading"></span>';
+    submitBtn.innerHTML = 'Sending to Email... <span class="loading-spinner"></span>';
     
     try {
-        const summaryUrl = await generateQRCode();
+        const summaryUrl = await generateQRCodeAndSendEmail();
         
         if (summaryUrl) {
-            submitBtn.innerHTML = '✓ QR CODE READY';
-            console.log('Summary URL:', summaryUrl);
-            showPopup('✅ SUCCESS!\n\nQR Code generated.\n\nClick SAVE QR CODE to download.', 'success', 'SUCCESS!');
+            submitBtn.innerHTML = '✓ SENT TO EMAIL';
+            
+            localStorage.removeItem('firstFormData');
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = 'GENERATE QR CODE';
+                submitBtn.disabled = false;
+            }, 3000);
         }
     } catch (error) {
         console.error('❌ Submission error:', error);
@@ -536,7 +585,6 @@ window.clearModalCanvas = clearModalCanvas;
 window.saveSignature = saveSignature;
 window.clearCanvas = clearCanvas;
 window.submitSecondForm = submitSecondForm;
-window.saveQRCode = saveQRCode;
 window.goBackToIndex = goBackToIndex;
 window.showRegisterInstruction = showRegisterInstruction;
 window.closeRegisterInstruction = closeRegisterInstruction;

@@ -81,7 +81,39 @@
             margin: 5px 0;
             text-align: center;
         }
-        </style>
+
+        #recipientEmail {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #003c8f;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .email-note {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #003c8f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="form-container">
@@ -200,34 +232,18 @@
 
         <div class="bottom-actions">
             <div class="qr-section">
-                <h3>OFFICIAL QR CODE</h3>
-                <div class="qr-code" id="qrCodeBox">
+                <h3>SEND FORM TO EMAIL</h3>
+                
+                <input type="email" id="recipientEmail" placeholder="Enter your email address" required>
+                <div class="email-note">
+                    The QR code link will be sent to your email
+                </div>
+                
+                <div style="display: none;">
                     <canvas id="qrCanvas" width="180" height="180"></canvas>
-                    <div class="qr-placeholder" id="qrPlaceholder">
-                        <i>📷</i>
-                        <span>Complete form<br>to generate QR</span>
-                    </div>
                 </div>
                 
-                <div class="qr-link-container" id="qrLinkContainer" style="display: none;">
-                    <div class="qr-link-label">DIRECT LINK (for PC users):</div>
-                    <a href="#" id="qrLink" class="qr-link" target="_blank">
-                        <i>🔗</i> Click here to view form summary
-                    </a>
-                    <div class="qr-note">Same content as scanning the QR code</div>
-                </div>
-                
-                <div class="save-section" id="saveSection" style="display: none;">
-                    <button class="save-btn" onclick="saveQRCode()" style="margin-bottom: 10px;">
-                        <span></span> SAVE QR CODE
-                    </button>
-                    
-                    <button class="email-btn" onclick="sendQRCodeViaEmail()" style="margin-top: 5px;">
-                        <span></span> SEND VIA EMAIL
-                    </button>
-                </div>
-                
-                <div id="qrSuccess" class="success-message">✓ Uploaded to cloud! QR Code ready.</div>
+                <div id="qrSuccess" class="success-message">✓ Form submitted! Email sent.</div>
             </div>
 
             <div class="action-buttons">
