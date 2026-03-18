@@ -356,6 +356,53 @@ function validateSecondForm() {
     return isValid;
 }
 
+function reviewForm() {
+    const formData = {
+        employerName: document.getElementById('registeredName').value,
+        idNumber: document.getElementById('idNumber').value,
+        companyAddress: document.getElementById('companyAddress').value,
+        telNumber: document.getElementById('telNumber').value,
+        
+        officialName1: document.getElementById('officialName1').value,
+        officialDesignation1: document.getElementById('officialDesignation1').value,
+        officialInitial1: document.getElementById('officialInitial1').value,
+        
+        officialName2: document.getElementById('officialName2').value,
+        officialDesignation2: document.getElementById('officialDesignation2').value,
+        officialInitial2: document.getElementById('officialInitial2').value,
+        
+        officialName3: document.getElementById('officialName3').value,
+        officialDesignation3: document.getElementById('officialDesignation3').value,
+        officialInitial3: document.getElementById('officialInitial3').value,
+        
+        grantingName: document.getElementById('grantingName').value,
+        grantingDate: document.getElementById('grantingDate').value,
+        recipientEmail: document.getElementById('recipientEmail').value
+    };
+    
+    let reviewMessage = "📋 FORM REVIEW\n\n";
+    reviewMessage += "Registered Employer Name: " + formData.employerName + "\n";
+    reviewMessage += "I.D. No.: " + formData.idNumber + "\n";
+    reviewMessage += "Address: " + formData.companyAddress + "\n";
+    reviewMessage += "Tel. No.: " + formData.telNumber + "\n\n";
+    
+    reviewMessage += "AUTHORIZED OFFICIALS:\n";
+    reviewMessage += "1. " + formData.officialName1 + " - " + formData.officialDesignation1 + " (" + formData.officialInitial1 + ")\n";
+    reviewMessage += "2. " + formData.officialName2 + " - " + formData.officialDesignation2 + " (" + formData.officialInitial2 + ")\n";
+    reviewMessage += "3. " + formData.officialName3 + " - " + formData.officialDesignation3 + " (" + formData.officialInitial3 + ")\n\n";
+    
+    reviewMessage += "Granting Authority: " + formData.grantingName + "\n";
+    reviewMessage += "Date: " + formData.grantingDate + "\n";
+    reviewMessage += "Email: " + formData.recipientEmail + "\n\n";
+    
+    reviewMessage += "✅ All signatures are complete.\n";
+    reviewMessage += "Click OK to proceed or CANCEL to edit.";
+    
+    if (confirm(reviewMessage)) {
+        submitSecondForm();
+    }
+}
+
 async function uploadToFirebase(allData) {
     try {
         const submissionId = 'SSS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -472,33 +519,31 @@ async function generateQRCodeAndSendEmail() {
 }
 
 async function sendEmailWithQR(email, summaryUrl) {
-    const templateParams = {
-        to_email: email,
-        to_name: email.split('@')[0],
-        from_name: "SSS System",
-        qr_link: summaryUrl,
-        submission_id: currentSubmissionId,
-        date_sent: new Date().toLocaleString(),
-        message: "Thank you for completing the SSS form. Your form has been successfully submitted."
-    };
-    
     try {
+        const qrCanvas = document.getElementById('qrCanvas');
+        const qrDataURL = qrCanvas.toDataURL('image/png');
+        
+        const templateParams = {
+            to_email: email,  
+            to_name: email.split('@')[0],
+            from_name: "SSS System",
+            qr_link: summaryUrl,
+            qr_image: qrDataURL,
+            submission_id: currentSubmissionId,
+            date_sent: new Date().toLocaleString(),
+            message: "Thank you for completing the SSS form."
+        };
+        
+        console.log("Sending to email:", email); 
+        
         const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
         console.log("✅ Email sent successfully!", response);
         
-        const qrSuccess = document.getElementById('qrSuccess');
-        if (qrSuccess) {
-            qrSuccess.style.display = 'block';
-            qrSuccess.innerHTML = '✓ Email sent successfully to ' + email;
-            setTimeout(() => {
-                qrSuccess.style.display = 'none';
-            }, 5000);
-        }
+        showPopup('✅ Email sent to ' + email, 'success', 'EMAIL SENT!');
         
-        return response;
     } catch (error) {
         console.error("❌ Email error:", error);
-        throw new Error("Failed to send email. Please try again.");
+        showPopup('Error: ' + (error.text || error.message), 'error');
     }
 }
 
@@ -579,7 +624,7 @@ async function submitSecondForm() {
             localStorage.removeItem('firstFormData');
             
             setTimeout(() => {
-                submitBtn.innerHTML = 'GENERATE QR CODE';
+                submitBtn.innerHTML = 'GENERATE & SEND QR CODE';
                 submitBtn.disabled = false;
             }, 3000);
         }
@@ -587,7 +632,7 @@ async function submitSecondForm() {
         console.error('❌ Submission error:', error);
         showPopup('Error: ' + error.message, 'error');
         submitBtn.disabled = false;
-        submitBtn.innerHTML = 'GENERATE QR CODE';
+        submitBtn.innerHTML = 'GENERATE & SEND QR CODE';
     }
 }
 
@@ -600,3 +645,4 @@ window.submitSecondForm = submitSecondForm;
 window.goBackToIndex = goBackToIndex;
 window.showRegisterInstruction = showRegisterInstruction;
 window.closeRegisterInstruction = closeRegisterInstruction;
+window.reviewForm = reviewForm;

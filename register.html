@@ -9,7 +9,211 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,60,143,0.15);
+            padding: 30px;
+        }
+
+        .header-with-logo {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .republic-header h1 {
+            font-size: 1.8rem;
+            color: #003c8f;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .republic-header h2 {
+            font-size: 1.4rem;
+            color: #1976d2;
+            margin: 5px 0;
+        }
+
+        .form-number {
+            color: #666;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .instruction-btn {
+            background: #ffc107;
+            color: #003c8f;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .form-title {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .form-title h2 {
+            font-size: 2rem;
+            color: #003c8f;
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .info-table td {
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .info-table td:first-child {
+            font-weight: 600;
+            color: #003c8f;
+            width: 200px;
+            background: #f8f9ff;
+        }
+
+        .info-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #999;
+            border-radius: 4px;
+            font-size: 14px;
+            background: #f5f5f5;
+        }
+
+        .info-table input[readonly] {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .authorization-text {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #1976d2;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .officials-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        .officials-table th {
+            background: #003c8f;
+            color: white;
+            padding: 15px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .officials-table td {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .officials-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .signature-canvas-small {
+            width: 100%;
+            max-width: 150px;
+            height: 60px;
+            border: 1px solid #003c8f;
+            border-radius: 4px;
+            background: white;
+            margin: 0 auto 5px;
+            display: block;
+        }
+
+        .signature-actions-small {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin: 5px 0;
+        }
+
+        .sign-btn-small, .clear-btn-small {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sign-btn-small {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .clear-btn-small {
+            background: #f44336;
+            color: white;
+        }
+
+        .sign-btn-small:hover, .clear-btn-small:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
         .granting-section {
             margin-top: 40px;
             padding: 30px;
@@ -83,6 +287,47 @@
             text-align: center;
         }
 
+        .date-section {
+            margin: 30px 0;
+            text-align: right;
+        }
+
+        .date-label {
+            font-weight: 600;
+            color: #003c8f;
+            margin-bottom: 5px;
+        }
+
+        .date-input {
+            padding: 10px;
+            border: 1px solid #999;
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 200px;
+        }
+
+        .bottom-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 40px;
+            gap: 30px;
+        }
+
+        .qr-section {
+            flex: 1;
+            text-align: center;
+            padding: 30px;
+            background: #f0f7ff;
+            border-radius: 12px;
+        }
+
+        .qr-section h3 {
+            color: #003c8f;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
         #recipientEmail {
             width: 100%;
             padding: 15px;
@@ -99,6 +344,71 @@
             font-style: italic;
         }
 
+        .action-buttons {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .review-btn, .primary-btn, .back-btn {
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .review-btn {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .review-btn:hover {
+            background: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .primary-btn {
+            background: #003c8f;
+            color: white;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .primary-btn:hover, .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 1rem;
+            margin-top: 15px;
+            display: none;
+            font-weight: 600;
+        }
+
         .loading-spinner {
             display: inline-block;
             width: 18px;
@@ -113,6 +423,218 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .modal-canvas {
+            width: 100%;
+            height: 200px;
+            border: 2px solid #003c8f;
+            border-radius: 8px;
+            margin: 20px 0;
+            cursor: crosshair;
+            background: white;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cancel-btn {
+            background: #999;
+            color: white;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            z-index: 10000;
+            text-align: center;
+        }
+
+        .popup-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .popup-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .popup-title.success {
+            color: #28a745;
+        }
+
+        .popup-title.error {
+            color: #f44336;
+        }
+
+        .popup-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            white-space: pre-line;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .popup-btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .popup-btn.primary {
+            background: #003c8f;
+            color: white;
+        }
+
+        .instruction-popup {
+            max-width: 600px;
+        }
+
+        .register-instruction-popup .popup-body {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .register-instruction-popup .instruction-list {
+            margin: 0;
+        }
+        
+        .register-instruction-popup .important-note {
+            margin: 15px 0 0;
+        }
+
+        .instruction-list {
+            list-style: none;
+        }
+
+        .instruction-list li {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .instruction-number {
+            width: 30px;
+            height: 30px;
+            background: #ffd700;
+            color: #003c8f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .important-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .important-note h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .popup-footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .popup-header {
+            background: #003c8f;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-actions {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -218,7 +740,7 @@
                         <button type="button" class="clear-btn-small" onclick="clearCanvas('grantingSignature')">CLEAR</button>
                     </div>
                     
-                    <input type="text" id="grantingName" placeholder="Full name and position (e.g., JUAN DELA CRUZ - President)" required>
+                    <input type="text" id="grantingName" placeholder="Full name and position" required>
                     
                     <div class="granting-label">(Please sign over printed name.)</div>
                     <div id="grantingError" class="error-message">Signature required</div>
@@ -237,7 +759,7 @@
                 
                 <input type="email" id="recipientEmail" placeholder="Enter your email address" required>
                 <div class="email-note">
-                    The QR code link will be sent to your email
+                    The QR code will be sent to your email
                 </div>
                 
                 <div style="display: none;">
@@ -248,12 +770,16 @@
             </div>
 
             <div class="action-buttons">
+                <button class="review-btn" type="button" onclick="reviewForm()">
+                    👁️ REVIEW FORM
+                </button>
+                
                 <button class="primary-btn" type="button" id="submitBtn" onclick="submitSecondForm()">
-                    GENERATE QR CODE
+                    GENERATE & SEND QR CODE
                 </button>
                 
                 <button class="back-btn" onclick="goBackToIndex()">
-                    <span>←</span> BACK TO COMPANY REP AUTHORIZATION
+                    <span>←</span> BACK
                 </button>
             </div>
         </div>
