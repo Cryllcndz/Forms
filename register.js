@@ -10,7 +10,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const NODE_API_URL = "http://localhost:3000/api/send-email"; // Palitan kapag naka-deploy na
+// EmailJS Config - gamit ang iyong existing keys
+const EMAILJS_PUBLIC_KEY = "CysQ3fwtKbTZZSppu";
+const EMAILJS_SERVICE_ID = "service_o52hc72";
+const EMAILJS_TEMPLATE_ID = "template_8akdn4j";
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
 
 let firstFormData = null;
 let currentSubmissionId = null;
@@ -457,7 +462,7 @@ async function generateQRCodeAndSendEmail() {
             });
         }
         
-        await sendEmailWithNode(email, summaryUrl);
+        await sendEmailWithQR(email, summaryUrl);
         
         console.log("✅ Form submitted and email sent!");
         return summaryUrl;
@@ -467,175 +472,33 @@ async function generateQRCodeAndSendEmail() {
     }
 }
 
-// ===== NODE.JS EMAIL FUNCTION =====
-async function sendEmailWithNode(email, summaryUrl) {
+// ===== EMAILJS EMAIL FUNCTION =====
+async function sendEmailWithQR(email, summaryUrl) {
     try {
         const qrCanvas = document.getElementById('qrCanvas');
         const qrDataURL = qrCanvas.toDataURL('image/png');
         
-        // Professional HTML email template
-        const htmlContent = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <title>SSS Form Confirmation</title>
-            </head>
-            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f5f5f5;">
-                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f5f5f5; padding: 20px;">
-                    <tr>
-                        <td align="center">
-                            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                                
-                                <!-- Header -->
-                                <tr>
-                                    <td style="background: linear-gradient(135deg, #003c8f 0%, #1a4fa2 100%); padding: 30px; border-radius: 8px 8px 0 0;">
-                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                            <tr>
-                                                <td width="80" valign="middle">
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Social_Security_System_%28SSS%29.svg" 
-                                                         alt="SSS Logo" 
-                                                         width="60" 
-                                                         height="60" 
-                                                         style="display: block; background: white; padding: 2px 0; object-fit: contain;">
-                                                </td>
-                                                <td valign="middle" style="color: white; padding-left: 15px;">
-                                                    <h1 style="margin: 0; font-size: 24px; font-weight: 700;">Republic of the Philippines</h1>
-                                                    <h2 style="margin: 5px 0 0 0; font-size: 18px; font-weight: 400;">SOCIAL SECURITY SYSTEM</h2>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Gold Bar -->
-                                <tr>
-                                    <td style="background-color: #ffd700; height: 4px;"></td>
-                                </tr>
-                                
-                                <!-- Content -->
-                                <tr>
-                                    <td style="padding: 40px 30px;">
-                                        
-                                        <!-- Reference Number -->
-                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f0f7ff; border-radius: 6px; margin-bottom: 30px;">
-                                            <tr>
-                                                <td style="padding: 15px;">
-                                                    <p style="margin: 0; color: #666; font-size: 14px;">Reference Number</p>
-                                                    <p style="margin: 5px 0 0 0; color: #003c8f; font-size: 18px; font-weight: 700; letter-spacing: 1px;">${currentSubmissionId}</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        
-                                        <!-- Greeting -->
-                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 10px 0;">Dear <strong style="color: #003c8f;">${email.split('@')[0]}</strong>,</p>
-                                        
-                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-                                            Thank you for submitting your SSS Specimen Signature Card (Form L-501). Your form has been successfully received and processed by our system.
-                                        </p>
-                                        
-                                        <!-- QR Code Section -->
-                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f8f9ff; border: 2px solid #cfe3ff; border-radius: 12px; margin: 30px 0; padding: 25px;">
-                                            <tr>
-                                                <td align="center">
-                                                    <h3 style="color: #003c8f; font-size: 18px; font-weight: 600; margin: 0 0 20px 0;">OFFICIAL SSS QR CODE</h3>
-                                                    
-                                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(summaryUrl)}" 
-                                                         alt="SSS Form QR Code" 
-                                                         style="width: 180px; height: 180px; border: 3px solid #003c8f; border-radius: 8px; padding: 5px; background: white; margin: 0 0 15px 0;">
-                                                    
-                                                    <p style="color: #666; font-size: 14px; margin: 10px 0;">
-                                                        Present this QR code at any SSS office for verification
-                                                    </p>
-                                                    
-                                                    <p style="color: #666; font-size: 13px; margin: 15px 0 0 0; background: white; padding: 12px; border-radius: 6px; border: 1px dashed #003c8f;">
-                                                        <strong style="color: #003c8f;">Direct Link:</strong><br>
-                                                        <a href="${summaryUrl}" style="color: #1976d2; word-break: break-all;">${summaryUrl}</a>
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        
-                                        <!-- Important Information -->
-                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
-                                            <tr>
-                                                <td style="padding: 0 0 10px 0; border-bottom: 2px solid #ffd700;">
-                                                    <h3 style="color: #003c8f; font-size: 16px; font-weight: 600; margin: 0;">IMPORTANT INFORMATION</h3>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 15px 0 0 0;">
-                                                    <table width="100%" cellpadding="8" cellspacing="0" border="0">
-                                                        <tr><td width="30" valign="top" style="color: #ffd700; font-size: 18px;">•</td><td style="color: #333; font-size: 14px;">This QR code serves as your official proof of SSS form submission</td></tr>
-                                                        <tr><td width="30" valign="top" style="color: #ffd700; font-size: 18px;">•</td><td style="color: #333; font-size: 14px;">Please keep this email for your records</td></tr>
-                                                        <tr><td width="30" valign="top" style="color: #ffd700; font-size: 18px;">•</td><td style="color: #333; font-size: 14px;">Present the QR code when transacting with SSS offices</td></tr>
-                                                        <tr><td width="30" valign="top" style="color: #ffd700; font-size: 18px;">•</td><td style="color: #333; font-size: 14px;">The link is valid for one (1) year from date of issuance</td></tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        
-                                        <!-- Date -->
-                                        <p style="color: #999; font-size: 13px; text-align: right; margin: 30px 0 0 0; border-top: 1px solid #e0e0e0; padding-top: 20px;">
-                                            Generated on: <strong>${new Date().toLocaleString()}</strong>
-                                        </p>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Footer -->
-                                <tr>
-                                    <td style="background-color: #003c8f; padding: 20px 30px; border-radius: 0 0 8px 8px;">
-                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                            <tr>
-                                                <td align="center" style="color: white; font-size: 12px; line-height: 1.6;">
-                                                    <p style="margin: 0 0 5px 0;">This is an automated message from the Social Security System. Please do not reply to this email.</p>
-                                                    <p style="margin: 0;">© 2024 Republic of the Philippines - Social Security System. All rights reserved.</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <!-- Disclaimer -->
-                            <p style="color: #999; font-size: 11px; margin-top: 15px;">
-                                This email contains confidential information intended only for the use of the addressee.
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </body>
-            </html>
-        `;
+        const templateParams = {
+            to_email: email,
+            to_name: email.split('@')[0],
+            from_name: "SSS System",
+            qr_link: summaryUrl,
+            qr_image: qrDataURL,
+            submission_id: currentSubmissionId,
+            date_sent: new Date().toLocaleString(),
+            message: "Thank you for completing the SSS form."
+        };
         
-        console.log("⏳ Sending email via Node.js server...");
+        console.log("Sending to email:", email);
         
-        const response = await fetch(NODE_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                to: email,
-                subject: `SSS Form Submission - ${currentSubmissionId}`,
-                html: htmlContent,
-                qrImage: qrDataURL,
-                submissionId: currentSubmissionId
-            })
-        });
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        console.log("✅ Email sent successfully!", response);
         
-        const result = await response.json();
-        
-        if (result.success) {
-            console.log("✅ Email sent successfully!");
-            showPopup('✅ Email sent to ' + email, 'success', 'EMAIL SENT!');
-        } else {
-            throw new Error(result.error || 'Failed to send email');
-        }
+        showPopup('✅ Email sent to ' + email, 'success', 'EMAIL SENT!');
         
     } catch (error) {
         console.error("❌ Email error:", error);
-        showPopup('Error: ' + error.message, 'error');
+        showPopup('Error: ' + (error.text || error.message), 'error');
         throw error;
     }
 }
