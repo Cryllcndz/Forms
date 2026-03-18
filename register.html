@@ -39,7 +39,6 @@
             margin: 0 auto;
         }
 
-        /* SIGNATURE CANVAS - NASA ITAAS */
         .granting-canvas {
             width: 100%;
             max-width: 400px;
@@ -64,7 +63,6 @@
             border-radius: 25px;
         }
 
-        /* NAME INPUT - NASA IBABA */
         #grantingName {
             width: 100%;
             max-width: 400px;
@@ -177,19 +175,16 @@
             </tbody>
         </table>
 
-        <!-- ===== GRANTING SECTION ===== -->
         <div class="granting-section">
             <div class="granting-title">Name and official capacity of person granting authority</div>
             <div class="granting-container">
                 <div class="granting-signature">
-                    <!-- SIGNATURE - NASA ITAAS -->
                     <canvas class="granting-canvas" id="grantingSignature" width="400" height="100"></canvas>
                     <div class="signature-actions-small">
                         <button type="button" class="sign-btn-small" onclick="openModal('grantingSignature')">SIGN</button>
                         <button type="button" class="clear-btn-small" onclick="clearCanvas('grantingSignature')">CLEAR</button>
                     </div>
                     
-                    <!-- NAME - NASA IBABA -->
                     <input type="text" id="grantingName" placeholder="Full name and position (e.g., JUAN DELA CRUZ - President)" required>
                     
                     <div class="granting-label">(Please sign over printed name.)</div>
@@ -224,11 +219,11 @@
                 
                 <div class="save-section" id="saveSection" style="display: none;">
                     <button class="save-btn" onclick="saveQRCode()" style="margin-bottom: 10px;">
-                        <span>💾</span> SAVE QR CODE
+                        <span></span> SAVE QR CODE
                     </button>
                     
                     <button class="email-btn" onclick="sendQRCodeViaEmail()" style="margin-top: 5px;">
-                        <span>📧</span> SEND VIA EMAIL
+                        <span></span> SEND VIA EMAIL
                     </button>
                 </div>
                 

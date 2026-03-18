@@ -12,13 +12,11 @@ const db = firebase.firestore();
 
 let firstFormData = null;
 
-// ===== DATA SANITIZER =====
 function sanitizeData(data) {
     if (data === null || data === undefined) {
         return '';
     }
     if (typeof data === 'string') {
-        // Remove any invalid characters
         return data.replace(/[^\x20-\x7E]/g, '');
     }
     if (typeof data === 'number' || typeof data === 'boolean') {
@@ -39,7 +37,6 @@ function sanitizeData(data) {
     return '';
 }
 
-// ===== INSTRUCTION POPUP FUNCTIONS =====
 function showRegisterInstruction() {
     const popup = document.getElementById('registerInstructionPopup');
     if (popup) {
@@ -68,7 +65,6 @@ function addInstructionButton() {
     }
 }
 
-// ===== PAGE LOAD =====
 window.addEventListener('load', function() {
     console.log("✅ Register form loaded");
     
@@ -346,9 +342,7 @@ async function generateQRCode() {
         throw new Error("No first form data found. Please complete first form.");
     }
     
-    // SIMPLE DATA - no nested objects
     const allData = {
-        // First form - simple strings only
         employerName: firstFormData.employerName || '',
         employerId: firstFormData.employerId || '',
         address: firstFormData.address || '',
@@ -361,13 +355,11 @@ async function generateQRCode() {
         specimenSignature1: firstFormData.specimenSignature1 || '',
         employerSignature: firstFormData.employerSignature || '',
         
-        // Second form - simple strings and arrays
         registeredName: document.getElementById('registeredName').value || '',
         idNumber: document.getElementById('idNumber').value || '',
         companyAddress: document.getElementById('companyAddress').value || '',
         telNumber: document.getElementById('telNumber').value || '',
         
-        // Officials as array of strings
         officialName1: document.getElementById('officialName1').value || '',
         officialDesignation1: document.getElementById('officialDesignation1').value || '',
         officialInitial1: document.getElementById('officialInitial1').value || '',
@@ -383,7 +375,6 @@ async function generateQRCode() {
         officialInitial3: document.getElementById('officialInitial3').value || '',
         officialSignature3: document.getElementById('officialSignature3').toDataURL() || '',
         
-        // Granting authority
         grantingName: document.getElementById('grantingName').value || '',
         grantingSignature: document.getElementById('grantingSignature').toDataURL() || '',
         grantingDate: document.getElementById('grantingDate').value || '',

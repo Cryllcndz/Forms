@@ -328,7 +328,6 @@
             text-align: center;
         }
 
-        /* ===== INAYOS NA GRANTING AUTHORITY - PIRMA SA ITAAS, NAME SA IBABA ===== */
         .granting-container {
             display: flex;
             flex-direction: column;
@@ -929,21 +928,17 @@
                 
                 html += '</table>';
                 
-                // ===== INAYOS NA GRANTING AUTHORITY =====
                 if (data.grantingName || data.grantingSignature) {
                     html += '<div class="granting-section">';
                     html += '<div class="granting-title">GRANTING AUTHORITY</div>';
                     html += '<div class="granting-container">';
                     
-                    // PIRMA - NASA ITAAS
                     if (data.grantingSignature) {
                         html += `<img src="${data.grantingSignature}" class="granting-signature-img" alt="Granting Signature">`;
                     }
                     
-                    // NAME - NASA IBABA
                     html += '<div class="granting-name">' + (data.grantingName || 'N/A') + '</div>';
                     
-                    // DATE
                     if (data.grantingDate) {
                         html += '<div class="granting-date">Date: ' + data.grantingDate + '</div>';
                     }
