@@ -771,7 +771,6 @@ function reviewForm() {
     goToReviewPage();
 }
 
-// ===== EXPORT FUNCTIONS =====
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.clearModalCanvas = clearModalCanvas;

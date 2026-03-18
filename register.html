@@ -117,28 +117,57 @@
             padding: 30px;
             background: #f0f7ff;
             border-radius: 12px;
+            border: 2px solid #003c8f;
+            box-shadow: 0 4px 10px rgba(0,60,143,0.1);
         }
 
         .qr-section h3 {
             color: #003c8f;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 10px;
+            display: inline-block;
         }
 
         #recipientEmail {
             width: 100%;
-            padding: 15px;
+            padding: 15px 20px;
             border: 2px solid #003c8f;
-            border-radius: 8px;
+            border-radius: 50px;
             font-size: 1rem;
             margin-bottom: 15px;
+            transition: all 0.3s;
+            background: white;
+            outline: none;
+        }
+
+        #recipientEmail:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        #recipientEmail.error {
+            border-color: #f44336;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
         .email-note {
             color: #666;
             font-size: 0.9rem;
-            margin: 10px 0;
+            margin: 10px 0 5px;
             font-style: italic;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px;
+            border-radius: 25px;
         }
 
         .action-buttons {
@@ -157,6 +186,8 @@
             width: 100%;
             font-weight: 600;
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .review-btn {
@@ -191,17 +222,14 @@
             transform: none;
         }
 
-        .error-message {
-            color: #f44336;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            display: none;
-        }
-
         .success-message {
             color: #28a745;
             font-size: 1rem;
-            margin-top: 15px;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 50px;
+            border: 1px solid #28a745;
             display: none;
             font-weight: 600;
         }
@@ -556,7 +584,7 @@
                 
                 <input type="email" id="recipientEmail" placeholder="Enter your email address" required>
                 <div class="email-note">
-                    The QR code will be sent to your email
+                    ✓ The QR code will be sent to your email
                 </div>
                 
                 <div style="display: none;">
