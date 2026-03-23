@@ -717,7 +717,6 @@
         max-height: 30px !important;
     }
 
-    /* Granting section */
     .granting-section {
         margin-top: 10px !important;
         padding: 10px !important;
@@ -753,6 +752,107 @@
         font-size: 13px !important;
         margin: 10px 0 6px !important;
     }
+
+    /* 📱 MOBILE RESPONSIVE FIX */
+@media (max-width: 768px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .summary-container {
+        gap: 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    /* Header stack */
+    .header-with-logo,
+    .republic-header {
+        flex-direction: column !important;
+        text-align: center;
+        gap: 10px !important;
+    }
+
+    .sss-header,
+    .republic-text {
+        text-align: center !important;
+    }
+
+    .logo-container img {
+        width: 60px !important;
+        height: auto !important;
+    }
+
+    .sss-header h1 {
+        font-size: 16px;
+    }
+
+    .republic-text h2 {
+        font-size: 15px;
+    }
+
+    .republic-text h3 {
+        font-size: 14px;
+    }
+
+    /* 📱 Company + Photo STACK */
+    .company-info-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .photo-container {
+        margin-top: 15px;
+    }
+
+    /* 📱 Table scroll (para di masira layout) */
+    .info-table {
+        display: block;
+        overflow-x: auto;
+        font-size: 0.9rem;
+    }
+
+    .info-table td {
+        padding: 8px;
+    }
+
+    /* 📱 Signatures stack */
+    .signature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* 📱 Officials table scroll */
+    .officials-table {
+        display: block;
+        overflow-x: auto;
+        font-size: 0.85rem;
+    }
+
+    /* 📱 Granting section */
+    .granting-container {
+        width: 100%;
+    }
+
+    .granting-signature-img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* 📱 Buttons */
+    .print-btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* 📱 Text spacing */
+    .certification-text {
+        font-size: 0.9rem;
+        padding: 15px;
+    }
+}
 }
 </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
