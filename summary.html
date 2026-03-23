@@ -56,28 +56,34 @@ body {
     align-items: center;
     justify-content: center;
     gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #003c8f;
 }
 
 .logo-container img {
     width: 80px;
-    height: 70px;
+    height: auto;
 }
 
 .sss-header h1 {
     font-size: 20px;
     font-weight: bold;
+    margin: 0 0 5px 0;
     color: #003c8f;
 }
 
 .branch {
     font-size: 14px;
     font-weight: bold;
-    color: #676767;
+    color: #b22234;
+    margin: 5px 0;
 }
 
 .address, .tel {
     font-size: 12px;
     color: #555;
+    margin: 2px 0;
 }
 
 /* REPUBLIC HEADER */
@@ -86,16 +92,29 @@ body {
     align-items: center;
     justify-content: center;
     gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #003c8f;
 }
 
 .republic-text h2 {
     font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
     color: #003c8f;
 }
 
 .republic-text h3 {
     font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
     color: #003c8f;
+}
+
+.republic-text .form-number {
+    font-size: 12px;
+    color: #555;
+    margin-top: 5px;
 }
 
 /* TITLE */
@@ -106,23 +125,28 @@ body {
 
 .form-title h2 {
     font-size: 18px;
+    font-weight: bold;
     color: #003c8f;
+    text-transform: uppercase;
 }
 
 /* COMPANY INFO */
 .company-info-section {
     display: flex;
     gap: 20px;
+    margin-bottom: 20px;
 }
 
 .info-table {
     width: 100%;
     border-collapse: collapse;
+    flex: 1;
 }
 
 .info-table td {
     padding: 12px;
     border: 1px solid #003c8f;
+    font-size: 14px;
 }
 
 .info-table td:first-child {
@@ -136,6 +160,15 @@ body {
 .photo-container {
     width: 150px;
     text-align: center;
+    flex-shrink: 0;
+}
+
+.photo-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #003c8f;
+    margin-bottom: 8px;
+    text-transform: uppercase;
 }
 
 .photo-frame {
@@ -144,6 +177,7 @@ body {
     border: 3px solid #003c8f;
     border-radius: 8px;
     overflow: hidden;
+    background: #f0f0f0;
 }
 
 .photo-frame img {
@@ -152,12 +186,29 @@ body {
     object-fit: cover;
 }
 
+.photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 12px;
+}
+
 /* TEXT */
 .certification-text {
     background: #f8f9ff;
     padding: 20px;
     border-left: 4px solid #1976d2;
     margin: 15px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.certification-text p {
+    margin-bottom: 10px;
 }
 
 /* SIGNATURE */
@@ -165,39 +216,164 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+    margin: 20px 0;
 }
 
 .signature-box {
     text-align: center;
     padding: 20px;
     background: #f8f9ff;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.signature-box h4 {
+    color: #003c8f;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-transform: uppercase;
 }
 
 .signature-img {
+    max-width: 100%;
     max-height: 70px;
+    margin: 10px 0;
+    border: 1px dashed #003c8f;
+    padding: 5px;
+    background: white;
 }
 
 .signature-name {
     font-weight: 600;
     color: #003c8f;
+    padding: 8px;
+    background: white;
+    border-radius: 5px;
+}
+
+/* NOTED SECTION */
+.noted-section {
+    margin-top: 25px;
+    text-align: center;
+    padding: 20px;
+    background: #f0f7ff;
+    border-radius: 8px;
+}
+
+.noted-label {
+    font-weight: 600;
+    color: #003c8f;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.noted-line {
+    width: 250px;
+    height: 2px;
+    background: #003c8f;
+    margin: 5px auto 15px auto;
+}
+
+.noted-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003c8f;
+    margin-bottom: 5px;
+}
+
+.noted-title {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
 }
 
 /* OFFICIALS */
 .officials-table {
     width: 100%;
     border-collapse: collapse;
+    margin: 20px 0;
 }
 
 .officials-table th {
     background: #003c8f;
     color: white;
-    padding: 10px;
+    padding: 12px;
+    text-transform: uppercase;
+    font-size: 13px;
+    border: 1px solid #003c8f;
 }
 
 .officials-table td {
     border: 1px solid #003c8f;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
+    font-size: 12px;
+}
+
+.official-signature-img {
+    max-width: 80px;
+    max-height: 40px;
+}
+
+/* GRANTING SECTION */
+.granting-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9ff;
+    border-radius: 8px;
+    border: 1px solid #cfe3ff;
+}
+
+.granting-title {
+    color: #003c8f;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.granting-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.granting-signature-img {
+    max-width: 250px;
+    max-height: 70px;
+    margin-bottom: 15px;
+    border: 2px solid #003c8f;
+    padding: 8px;
+    background: white;
+    border-radius: 8px;
+}
+
+.granting-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #003c8f;
+    margin: 5px 0;
+    padding: 8px 15px;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #1976d2;
+    width: 100%;
+    text-align: center;
+}
+
+.granting-label {
+    font-size: 11px;
+    color: #666;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.granting-date {
+    margin-top: 8px;
+    color: #666;
+    font-size: 12px;
 }
 
 /* BUTTON */
@@ -207,71 +383,366 @@ body {
     padding: 12px 30px;
     border-radius: 40px;
     border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
     display: block;
     margin: 20px auto;
+    transition: 0.2s;
 }
 
-/* 📱 MOBILE FIX */
-@media (max-width: 768px) {
+.print-btn:hover {
+    background: #002a66;
+    transform: scale(1.02);
+}
 
+.verified-badge {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.verified-badge span {
+    background: #4caf50;
+    color: white;
+    padding: 6px 25px;
+    border-radius: 50px;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.timestamp {
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.loading, .error-message {
+    text-align: center;
+    padding: 50px;
+    background: white;
+    border-radius: 15px;
+    font-size: 16px;
+}
+
+/* 📱 MOBILE FIX - BETTER LAYOUT ON PHONE */
+@media (max-width: 768px) {
     body {
         padding: 10px;
+    }
+
+    .summary-container {
+        gap: 15px;
     }
 
     .card-body {
         padding: 15px;
     }
 
+    /* Header - stack vertically on mobile */
     .header-with-logo,
     .republic-header {
         flex-direction: column;
         text-align: center;
+        gap: 12px;
     }
 
+    .logo-container img {
+        width: 60px;
+    }
+
+    .sss-header h1 {
+        font-size: 16px;
+    }
+
+    .branch {
+        font-size: 12px;
+    }
+
+    .address, .tel {
+        font-size: 10px;
+    }
+
+    .republic-text h2 {
+        font-size: 14px;
+    }
+
+    .republic-text h3 {
+        font-size: 12px;
+    }
+
+    .republic-text .form-number {
+        font-size: 10px;
+    }
+
+    /* Title */
+    .form-title h2 {
+        font-size: 14px;
+    }
+
+    /* Company info - stack vertically */
     .company-info-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* Table - horizontal scroll */
+    .info-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 11px;
+        width: 100%;
+    }
+
+    .info-table td {
+        padding: 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .info-table td:first-child {
+        width: 120px;
+    }
+
+    /* Photo - center and smaller */
+    .photo-container {
+        width: 100%;
+        display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .info-table {
-        display: block;
-        overflow-x: auto;
-        font-size: 0.9rem;
+    .photo-frame {
+        width: 100px;
+        height: 100px;
     }
 
+    .photo-label {
+        font-size: 10px;
+    }
+
+    /* Certification text */
+    .certification-text {
+        padding: 12px;
+        font-size: 11px;
+        margin: 10px 0;
+    }
+
+    /* Signature grid - single column */
     .signature-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
 
+    .signature-box {
+        padding: 12px;
+    }
+
+    .signature-box h4 {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .signature-img {
+        max-height: 50px;
+    }
+
+    .signature-name {
+        font-size: 11px;
+        padding: 5px;
+    }
+
+    /* Officials table - horizontal scroll */
     .officials-table {
         display: block;
         overflow-x: auto;
-        font-size: 0.85rem;
+        -webkit-overflow-scrolling: touch;
+        font-size: 10px;
+        width: 100%;
     }
 
-    .photo-container {
+    .officials-table th {
+        padding: 8px 5px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .officials-table td {
+        padding: 8px 5px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .official-signature-img {
+        max-width: 50px;
+        max-height: 25px;
+    }
+
+    /* Noted section */
+    .noted-section {
+        padding: 12px;
         margin-top: 15px;
     }
 
+    .noted-label {
+        font-size: 12px;
+    }
+
+    .noted-line {
+        width: 150px;
+    }
+
+    .noted-name {
+        font-size: 14px;
+    }
+
+    .noted-title {
+        font-size: 11px;
+    }
+
+    /* Granting section */
+    .granting-section {
+        padding: 12px;
+    }
+
+    .granting-title {
+        font-size: 12px;
+    }
+
+    .granting-signature-img {
+        max-width: 150px;
+        max-height: 50px;
+    }
+
+    .granting-name {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .granting-label {
+        font-size: 9px;
+    }
+
+    .granting-date {
+        font-size: 10px;
+    }
+
+    /* Button */
     .print-btn {
         width: 100%;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .verified-badge span {
+        font-size: 10px;
+        padding: 4px 20px;
+    }
+
+    .timestamp {
+        font-size: 9px;
     }
 }
 
-/* PRINT (keep mo original mo if mas detailed) */
+/* Tablet view */
+@media (min-width: 600px) and (max-width: 900px) {
+    .company-info-section {
+        flex-direction: row;
+    }
+    
+    .photo-container {
+        width: 120px;
+    }
+    
+    .photo-frame {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .signature-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* PRINT */
 @media print {
+    @page {
+        size: landscape;
+        margin: 0.3in;
+    }
+
     body {
         background: white;
         padding: 0;
+        margin: 0;
     }
 
-    .print-btn {
-        display: none;
+    .print-btn, .verified-badge, .timestamp {
+        display: none !important;
+    }
+
+    .summary-container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+        gap: 0;
     }
 
     .form-card {
         box-shadow: none;
+        border: 1px solid #000;
+        margin: 0;
         border-radius: 0;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+    }
+
+    .form-card:last-child {
+        page-break-after: auto !important;
+    }
+
+    .card-header {
+        display: none !important;
+    }
+
+    .card-body {
+        padding: 20px !important;
+    }
+
+    .header-with-logo, .republic-header {
+        flex-direction: row !important;
+        gap: 20px !important;
+    }
+
+    .logo-container img {
+        width: 70px !important;
+    }
+
+    .sss-header h1 {
+        font-size: 18px !important;
+    }
+
+    .company-info-section {
+        flex-direction: row !important;
+        gap: 20px !important;
+    }
+
+    .info-table {
+        overflow: visible !important;
+    }
+
+    .signature-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .officials-table {
+        overflow: visible !important;
     }
 }
 </style>
