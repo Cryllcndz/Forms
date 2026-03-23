@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>SSS Form Summary</title>
-    <style>
+    <link rel="stylesheet" href="form.css">
+       
+ <style>
         * {
             margin: 0;
             padding: 0;
@@ -13,9 +15,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 15px;
+            background: #e9ecef;
+            padding: 20px;
         }
 
         .summary-container {
@@ -31,99 +32,117 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,60,143,0.15);
             overflow: hidden;
-            border: 1px solid #e0e0e0;
+            border: 2px solid #003c8f;
         }
 
         .card-header {
-            background: linear-gradient(135deg, #003c8f, #1a4fa2);
+            background: #003c8f;
             color: white;
             padding: 15px 25px;
             font-size: 1.3rem;
             font-weight: 700;
             text-transform: uppercase;
-            border-bottom: 3px solid #ffd700;
+            border-bottom: 2px solid #ffd700;
+            text-align: center;
         }
 
         .card-body {
             padding: 25px;
         }
 
+        /* Header styling - same as index */
         .header-with-logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 20px !important;
+            margin-bottom: 20px !important;
+            padding-bottom: 15px !important;
+            border-bottom: 2px solid #003c8f !important;
         }
 
-        .logo-left {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
+        .logo-container {
+            flex-shrink: 0 !important;
         }
 
-        .logo-left img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .logo-container img {
+            width: 80px !important;
+            height: 70px !important;
+            margin-bottom: 0 !important;
         }
 
-        .header-text {
-            flex: 1;
+        .sss-header {
+            text-align: left;
         }
 
-        .header-text h1 {
-            font-size: 1.8rem;
+        .sss-header h1 {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
             color: #003c8f;
-            text-transform: uppercase;
-            margin-bottom: 5px;
         }
 
-        .header-text .branch {
-            color: #1976d2;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .header-text .address {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .republic-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .republic-text {
-            flex: 1;
-        }
-
-        .republic-text h2 {
-            font-size: 1.8rem;
-            color: #003c8f;
-            text-transform: uppercase;
-        }
-
-        .republic-text h3 {
-            font-size: 1.4rem;
-            color: #1976d2;
+        .branch {
+            font-size: 14px;
+            font-weight: bold;
+            color: #676767;
             margin: 5px 0;
         }
 
+        .address, .tel {
+            font-size: 12px;
+            color: #555;
+            margin: 2px 0;
+        }
+
+        /* Republic header styling */
+        .republic-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #003c8f;
+        }
+
+        .republic-text {
+            text-align: left;
+        }
+
+        .republic-text h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            color: #003c8f;
+        }
+
+        .republic-text h3 {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            color: #003c8f;
+        }
+
         .republic-text .form-number {
-            color: #666;
-            font-size: 0.9rem;
-            font-style: italic;
+            font-size: 12px;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        /* Form title styling - placed below header */
+        .form-title {
+            text-align: center;
+            margin: 15px 0 20px 0;
+        }
+
+        .form-title h2 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #003c8f;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .company-info-section {
@@ -143,7 +162,7 @@
 
         .info-table td {
             padding: 12px 15px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #003c8f;
         }
 
         .info-table td:first-child {
@@ -264,10 +283,11 @@
             color: white;
             padding: 12px;
             text-transform: uppercase;
+            border: 1px solid #003c8f;
         }
 
         .officials-table td {
-            border: 1px solid #e0e0e0;
+            border: 1px solid #003c8f;
             padding: 10px;
             text-align: center;
         }
@@ -391,20 +411,22 @@
         }
 
         .print-btn {
-            background: linear-gradient(135deg, #003c8f, #1976d2);
+            background: #003c8f;
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            border-radius: 50px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 40px;
             cursor: pointer;
             margin: 20px auto;
             display: block;
+            font-weight: bold;
+            transition: 0.2s;
         }
 
         .print-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(25, 118, 210, 0.3);
+            background: #002a66;
+            transform: scale(1.02);
         }
 
         .loading, .error-message {
@@ -416,352 +438,323 @@
         }
 
         .loading {
-            color: #1976d2;
+            color: #003c8f;
         }
 
         .error-message {
             color: #f44336;
         }
 
-        @media (max-width: 768px) {
-            .header-with-logo, 
-            .republic-header {
-                flex-direction: column;
-                text-align: center;
-                align-items: center;
-            }
+     @media print {
+    @page {
+        size: landscape;
+        margin: 0.3in;
+    }
 
-            .logo-left {
-                margin-bottom: 10px;
-                width: 80px;
-                height: 80px;
-            }
+    body {
+        background: white;
+        padding: 0;
+        margin: 0;
+    }
 
-            .company-info-section {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
+    .print-btn, .verified-badge, .timestamp {
+        display: none !important;
+    }
 
-            .info-table {
-                width: 100%;
-                font-size: 0.85rem;
-            }
-            
-            .info-table td {
-                padding: 8px 10px;
-            }
-            
-            .info-table td:first-child {
-                width: 120px;
-            }
+    .summary-container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
 
-            .photo-container {
-                margin-top: 20px;
-            }
+    .form-card {
+        box-shadow: none;
+        border: 1px solid #000;
+        margin: 0;
+        border-radius: 0;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+    }
 
-            .signature-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .signature-box {
-                padding: 15px;
-            }
-            
-            .signature-img {
-                max-height: 90px;
-                width: auto;
-            }
-            
-            .official-signature-img {
-                max-width: 80px;
-                max-height: 35px;
-            }
-            
-            .granting-signature-img {
-                max-width: 250px;
-                max-height: 70px;
-            }
-            
-            .officials-table {
-                font-size: 0.8rem;
-            }
-            
-            .officials-table th {
-                padding: 8px 5px;
-                font-size: 0.75rem;
-            }
-            
-            .officials-table td {
-                padding: 8px 3px;
-            }
-            
-            .noted-line {
-                width: 200px;
-            }
-        }
+    .form-card:last-child {
+        page-break-after: auto !important;
+    }
 
-        @media print {
-            @page {
-                size: landscape;
-                margin: 0.3in;
-            }
+    .form-title {
+        margin: 15px 0 20px 0 !important;
+    }
 
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
-            }
+    .form-title h2 {
+        font-size: 18px !important;
+        font-weight: bold !important;
+        color: #003c8f !important;
+    }
 
-            .print-btn, .verified-badge, .timestamp {
-                display: none !important;
-            }
+    .card-header {
+        display: none !important;
+    }
 
-            .summary-container {
-                max-width: 100%;
-                padding: 0;
-                gap: 0;
-            }
+    .card-body {
+        padding: 20px !important;
+    }
 
-            .form-card {
-                box-shadow: none;
-                border: 1px solid #000;
-                margin: 0;
-                border-radius: 0;
-                page-break-after: always !important;
-                page-break-inside: avoid;
-            }
+    /* Header with logo - larger */
+    .header-with-logo {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 25px !important;
+        margin-bottom: 20px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 2px solid #003c8f !important;
+    }
 
-            .form-card:last-child {
-                page-break-after: auto !important;
-            }
+    .logo-container {
+        flex-shrink: 0 !important;
+    }
 
-            .card-header {
-                background: #003c8f !important;
-                color: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                padding: 12px 20px !important;
-                font-size: 1.2rem !important;
-            }
+    .logo-container img {
+        width: 90px !important;
+        height: auto !important;
+        margin-bottom: 0 !important;
+    }
 
-            .card-body {
-                padding: 15px !important;
-            }
+    .sss-header {
+        text-align: left !important;
+    }
 
-            .header-with-logo, .republic-header {
-                display: flex !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                gap: 10px !important;
-                margin-bottom: 15px !important;
-            }
+    .sss-header h1 {
+        font-size: 22px !important;
+        font-weight: bold !important;
+        margin: 0 0 5px 0 !important;
+        color: #003c8f !important;
+    }
 
-            .logo-left {
-                width: 65px !important;
-                height: 65px !important;
-                flex-shrink: 0 !important;
-            }
+    .branch {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        color: #5d5d5d !important;
+        margin: 5px 0 !important;
+    }
 
-            .header-text, .republic-text {
-                flex: 1 !important;
-                text-align: left !important;
-            }
+    .address, .tel {
+        font-size: 11px !important;
+        color: #555 !important;
+        margin: 2px 0 !important;
+    }
 
-            .header-text h1, .republic-text h2 {
-                font-size: 1.6rem !important;
-                margin: 0 !important;
-            }
+    /* Republic header - larger */
+    .republic-header {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 25px !important;
+        margin-bottom: 20px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 2px solid #003c8f !important;
+    }
 
-            .branch, .address {
-                font-size: 0.9rem !important;
-            }
+    .republic-text {
+        text-align: left !important;
+    }
 
-            .company-info-section {
-                display: flex !important;
-                flex-direction: row !important;
-                justify-content: space-between !important;
-                align-items: flex-start !important;
-                gap: 15px !important;
-            }
+    .republic-text h2 {
+        font-size: 20px !important;
+        font-weight: bold !important;
+        margin: 0 0 5px 0 !important;
+        color: #003c8f !important;
+    }
 
-            .info-table {
-                flex: 1 !important;
-                font-size: 0.9rem !important;
-            }
+    .republic-text h3 {
+        font-size: 16px !important;
+        font-weight: bold !important;
+        margin: 0 0 5px 0 !important;
+        color: #003c8f !important;
+    }
 
-            .info-table td {
-                padding: 8px 12px !important;
-                border: 1px solid #000 !important;
-            }
+    .republic-text .form-number {
+        font-size: 11px !important;
+        color: #555 !important;
+        margin-top: 3px !important;
+    }
 
-            .info-table td:first-child {
-                background: #f8f9ff !important;
-                color: #003c8f !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                width: 150px !important;
-            }
+    /* Company info section */
+    .company-info-section {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        gap: 20px !important;
+        margin-bottom: 15px !important;
+    }
 
-            .photo-container {
-                width: 1.2in !important;
-                text-align: center !important;
-                flex-shrink: 0 !important;
-            }
+    .info-table {
+        flex: 1 !important;
+    }
 
-            .photo-label {
-                font-size: 0.8rem !important;
-                margin-bottom: 5px !important;
-                font-weight: 600 !important;
-            }
+    .info-table td {
+        padding: 8px 12px !important;
+        border: 1px solid #000 !important;
+        font-size: 12px !important;
+    }
 
-            .photo-frame {
-                width: 1in !important;
-                height: 1in !important;
-                border: 2px solid #003c8f !important;
-                margin: 0 auto !important;
-                border-radius: 4px !important;
-                overflow: hidden !important;
-                background: #f0f0f0 !important;
-            }
+    .info-table td:first-child {
+        background: #f8f9ff !important;
+        color: #003c8f !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        width: 140px !important;
+        font-size: 12px !important;
+    }
 
-            .photo-frame img {
-                width: 100% !important;
-                height: 100% !important;
-                object-fit: cover !important;
-            }
+    /* Photo - larger */
+    .photo-container {
+        width: 100px !important;
+        text-align: center !important;
+        flex-shrink: 0 !important;
+    }
 
-            .photo-placeholder {
-                width: 100% !important;
-                height: 100% !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                color: #999 !important;
-                font-size: 0.8rem !important;
-            }
+    .photo-label {
+        font-size: 11px !important;
+        margin-bottom: 5px !important;
+        font-weight: 600 !important;
+    }
 
-            .certification-text {
-                padding: 12px !important;
-                margin: 10px 0 !important;
-                font-size: 0.85rem !important;
-                line-height: 1.4 !important;
-                border-left: 3px solid #1976d2 !important;
-                background: #f8f9ff !important;
-            }
+    .photo-frame {
+        width: 90px !important;
+        height: 90px !important;
+        border: 2px solid #003c8f !important;
+        margin: 0 auto !important;
+        border-radius: 6px !important;
+        overflow: hidden !important;
+        background: #f0f0f0 !important;
+    }
 
-            .signature-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 15px !important;
-                margin: 15px 0 !important;
-            }
+    /* Certification text */
+    .certification-text {
+        padding: 10px !important;
+        margin: 10px 0 !important;
+        font-size: 11px !important;
+        line-height: 1.5 !important;
+        border-left: 3px solid #1976d2 !important;
+        background: #f8f9ff !important;
+    }
 
-            .signature-box {
-                padding: 12px !important;
-                border: 1px solid #000 !important;
-                background: #f8f9ff !important;
-            }
+    /* Signature grid */
+    .signature-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 15px !important;
+        margin: 12px 0 !important;
+    }
 
-            .signature-box h4 {
-                font-size: 0.9rem !important;
-                margin-bottom: 8px !important;
-            }
+    .signature-box {
+        padding: 12px !important;
+        border: 1px solid #000 !important;
+        background: #f8f9ff !important;
+    }
 
-            .signature-img {
-                max-height: 50px !important;
-                margin: 5px 0 !important;
-                border: 1px solid #003c8f !important;
-            }
+    .signature-box h4 {
+        font-size: 12px !important;
+        margin-bottom: 8px !important;
+        padding: 4px !important;
+    }
 
-            .signature-name {
-                font-size: 0.8rem !important;
-                padding: 5px !important;
-            }
+    .signature-img {
+        max-height: 55px !important;
+        margin: 5px 0 !important;
+        border: 1px solid #003c8f !important;
+    }
 
-            .noted-section {
-                margin-top: 15px !important;
-                padding: 15px !important;
-                background: #f0f7ff !important;
-                border: 1px solid #003c8f !important;
-            }
+    .signature-name {
+        font-size: 11px !important;
+        padding: 5px !important;
+    }
 
-            .noted-label {
-                font-weight: 600 !important;
-                color: #003c8f !important;
-                margin-bottom: 5px !important;
-                text-align: center !important;
-            }
+    /* Noted section */
+    .noted-section {
+        margin-top: 12px !important;
+        padding: 12px !important;
+        background: #f0f7ff !important;
+        border: 1px solid #003c8f !important;
+    }
 
-            .noted-line {
-                width: 200px !important;
-                height: 2px !important;
-                background: #003c8f !important;
-                margin: 5px auto 15px auto !important;
-            }
+    .noted-label {
+        font-size: 12px !important;
+        margin-bottom: 4px !important;
+    }
 
-            .noted-name {
-                font-size: 1rem !important;
-                font-weight: 700 !important;
-                color: #003c8f !important;
-                margin-bottom: 3px !important;
-            }
+    .noted-line {
+        width: 150px !important;
+        height: 1px !important;
+        margin: 4px auto 10px auto !important;
+    }
 
-            .noted-title {
-                font-size: 0.9rem !important;
-                font-style: italic !important;
-                color: #666 !important;
-            }
+    .noted-name {
+        font-size: 13px !important;
+        margin-bottom: 3px !important;
+    }
 
-            .form-card:last-child .info-table td {
-                padding: 6px 8px !important;
-                font-size: 0.8rem !important;
-                border: 1px solid #000 !important;
-            }
+    .noted-title {
+        font-size: 11px !important;
+    }
 
-            .form-card:last-child .info-table td:first-child {
-                background: #f8f9ff !important;
-                color: #003c8f !important;
-                font-weight: 600 !important;
-                width: 140px !important;
-                white-space: nowrap !important;
-            }
+    /* Officials table */
+    .officials-table th {
+        padding: 6px !important;
+        font-size: 11px !important;
+    }
 
-            .officials-table th {
-                padding: 4px !important;
-                font-size: 0.8rem !important;
-            }
+    .officials-table td {
+        padding: 6px !important;
+        font-size: 11px !important;
+    }
 
-            .officials-table td {
-                padding: 4px !important;
-                font-size: 0.75rem !important;
-            }
+    .official-signature-img {
+        max-width: 60px !important;
+        max-height: 30px !important;
+    }
 
-            .official-signature-img {
-                max-width: 60px !important;
-                max-height: 25px !important;
-            }
+    /* Granting section */
+    .granting-section {
+        margin-top: 10px !important;
+        padding: 10px !important;
+    }
 
-            .granting-section {
-                margin-top: 10px !important;
-                padding: 10px !important;
-            }
+    .granting-title {
+        font-size: 12px !important;
+        margin-bottom: 8px !important;
+    }
 
-            .granting-title {
-                font-size: 0.9rem !important;
-            }
+    .granting-signature-img {
+        max-width: 130px !important;
+        max-height: 45px !important;
+        margin-bottom: 6px !important;
+        padding: 5px !important;
+    }
 
-            .granting-section img {
-                max-height: 40px !important;
-            }
+    .granting-name {
+        font-size: 12px !important;
+        padding: 5px 10px !important;
+    }
 
-            .granting-name {
-                font-size: 0.9rem !important;
-                padding: 5px !important;
-            }
-        }
-    </style>
+    .granting-label {
+        font-size: 10px !important;
+    }
+
+    .granting-date {
+        font-size: 11px !important;
+        margin-top: 5px !important;
+    }
+
+    h3 {
+        font-size: 13px !important;
+        margin: 10px 0 6px !important;
+    }
+}
+</style>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
@@ -782,8 +775,6 @@
             };
             firebase.initializeApp(firebaseConfig);
             console.log("✅ Firebase initialized");
-        } else {
-            console.log("✅ Firebase already initialized");
         }
         
         const db = firebase.firestore();
@@ -820,68 +811,74 @@
                 
                 html += '<div class="verified-badge"><span>✓ VERIFIED CLOUD DATA</span></div>';
                 
+                // FORM 1 - COMPANY REPRESENTATIVE AUTHORIZATION CARD
                 html += '<div class="form-card">';
-                html += '<div class="card-header">COMPANY REPRESENTATIVE AUTHORIZATION CARD</div>';
                 html += '<div class="card-body">';
                 
+                // Header with logo - same as index
                 html += '<div class="header-with-logo">';
-                html += '<div class="logo-left">';
-                html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.innerHTML=\'SSS\';">';
+                html += '<div class="logo-container">';
+                html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display=\'none\';">';
                 html += '</div>';
-                html += '<div class="header-text">';
+                html += '<div class="sss-header">';
                 html += '<h1>Social Security System</h1>';
                 html += '<div class="branch">EASTWOOD BRANCH</div>';
                 html += '<div class="address">187 ABQ Building, E. Rodriguez Jr. Ave., Bagumbayan, QC</div>';
+                html += '<div class="tel">Tel. Nos.: 8351-1605; 8351-1623</div>';
                 html += '</div>';
                 html += '</div>';
                 
+                // Form title below header
+                html += '<div class="form-title">';
+                html += '<h2>COMPANY REPRESENTATIVE AUTHORIZATION CARD</h2>';
+                html += '</div>';
+                
+                // Company info with photo
                 html += '<div class="company-info-section">';
-                
                 html += '<table class="info-table">';
-                html += '<tr><td>EMPLOYER NAME:</td><td>' + (data.employerName || 'N/A') + '</td></tr>';
-                html += '<tr><td>EMPLOYER ID NO.:</td><td>' + (data.employerId || 'N/A') + '</td></tr>';
-                html += '<tr><td>ADDRESS:</td><td>' + (data.address || 'N/A') + '</td></tr>';
-                html += '<tr><td>TELEPHONE NO.:</td><td>' + (data.telephone || 'N/A') + '</td></tr>';
-                html += '</table>';
+                html += '<td>EMPLOYER NAME:<\/td><td>' + (data.employerName || 'N/A') + '<\/td><\/tr>';
+                html += '<td>EMPLOYER ID NO.:<\/td><td>' + (data.employerId || 'N/A') + '<\/td><\/tr>';
+                html += '<td>ADDRESS:<\/td><td>' + (data.address || 'N/A') + '<\/td><\/tr>';
+                html += '<td>TELEPHONE NO.:<\/td><td>' + (data.telephone || 'N/A') + '<\/td><\/tr>';
+                html += '<\/table>';
                 
                 html += '<div class="photo-container">';
-                html += '<div class="photo-label">1x1 PHOTO</div>';
+                html += '<div class="photo-label">PHOTO 1x1</div>';
                 html += '<div class="photo-frame">';
                 if (data.photo && data.photo !== '#' && data.photo !== '') {
-                    html += `<img src="${data.photo}" alt="1x1 Photo">`;
+                    html += '<img src="' + data.photo + '" alt="1x1 Photo">';
                 } else {
                     html += '<div class="photo-placeholder">No image</div>';
                 }
                 html += '</div>';
                 html += '</div>';
+                html += '</div>';
                 
-                html += '</div>'; 
-                
+                // Certification text
                 html += '<div class="certification-text">';
                 html += '<p>This is to certify that Mr./Ms. <strong>' + (data.certName || 'N/A') + '</strong> with SS # <strong>' + (data.ssNumber || 'N/A') + '</strong>, whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company\'s employees.</p>';
                 html += '<p>This Certification shall be valid within one (1) year from the date of issuance unless otherwise revoked and the SSS Eastwood Branch duly notified.</p>';
                 html += '</div>';
                 
+                // Signatures
                 html += '<div class="signature-grid">';
-                
                 if (data.specimenSignature1) {
                     html += '<div class="signature-box">';
                     html += '<h4>SPECIMEN SIGNATURE</h4>';
-                    html += `<img src="${data.specimenSignature1}" class="signature-img">`;
+                    html += '<img src="' + data.specimenSignature1 + '" class="signature-img">';
                     html += '<div class="signature-name">' + (data.specimenName1 || '') + '</div>';
                     html += '</div>';
                 }
-                
                 if (data.employerSignature) {
                     html += '<div class="signature-box">';
                     html += '<h4>SIGNATURE OVER PRINTED NAME</h4>';
-                    html += `<img src="${data.employerSignature}" class="signature-img">`;
+                    html += '<img src="' + data.employerSignature + '" class="signature-img">';
                     html += '<div class="signature-name">' + (data.employerName2 || data.employerName || '') + '</div>';
                     html += '</div>';
                 }
-                
                 html += '</div>';
                 
+                // Noted by
                 html += '<div class="noted-section">';
                 html += '<div class="noted-label">Noted by:</div>';
                 html += '<div class="noted-line"></div>';
@@ -889,15 +886,16 @@
                 html += '<div class="noted-title">Branch Head</div>';
                 html += '</div>';
                 
-                html += '</div></div>'; 
+                html += '</div></div>';
                 
+                // FORM 2 - SPECIMEN SIGNATURE CARD
                 html += '<div class="form-card">';
-                html += '<div class="card-header">SPECIMEN SIGNATURE CARD</div>';
                 html += '<div class="card-body">';
                 
+                // Republic header
                 html += '<div class="republic-header">';
-                html += '<div class="logo-left">';
-                html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.innerHTML=\'SSS\';">';
+                html += '<div class="logo-container">';
+                html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display=\'none\';">';
                 html += '</div>';
                 html += '<div class="republic-text">';
                 html += '<h2>Republic of the Philippines</h2>';
@@ -906,102 +904,66 @@
                 html += '</div>';
                 html += '</div>';
                 
+                // Form title below header
+                html += '<div class="form-title">';
+                html += '<h2>SPECIMEN SIGNATURE CARD</h2>';
+                html += '</div>';
+                
+                // Employer info
                 html += '<table class="info-table">';
-                html += '<tr>';
-                html += '<td>Registered Employer Name:</td>';
-                html += '<td>' + (data.registeredName || data.employerName || 'N/A') + '</td>';
-                html += '</tr>';
-                html += '<tr>';
-                html += '<td>I.D. No.:</td>';
-                html += '<td>' + (data.idNumber || data.employerId || 'N/A') + '</td>';
-                html += '</tr>';
-                html += '<tr>';
-                html += '<td>Address:</td>';
-                html += '<td>' + (data.companyAddress || data.address || 'N/A') + '</td>';
-                html += '</tr>';
-                html += '<tr>';
-                html += '<td>Tel. No.:</td>';
-                html += '<td>' + (data.telNumber || data.telephone || 'N/A') + '</td>';
-                html += '</tr>';
+                html += '<td>Registered Employer Name:<\/td><td>' + (data.registeredName || data.employerName || 'N/A') + '</td></tr>';
+                html += '<td>I.D. No.:</td><td>' + (data.idNumber || data.employerId || 'N/A') + '</td></tr>';
+                html += '<td>Address:</td><td>' + (data.companyAddress || data.address || 'N/A') + '</td></tr>';
+                html += '<td>Tel. No.:</td><td>' + (data.telNumber || data.telephone || 'N/A') + '</td></tr>';
                 html += '</table>';
                 
-                html += '<h3 style="color:#003c8f; margin:20px 0 10px;">Authorized Officials</h3>';
+                // Officials table
+                html += '<h3 style="color:#003c8f; margin:12px 0 8px; text-align:center;">Authorized Officials</h3>';
                 html += '<table class="officials-table">';
-                html += '<tr><th>Name</th><th>Designation</th><th>Initials</th><th>Signature</th></tr>';
+                html += '<th>Printed Name</th><th>Designation</th><th>Initial</th><th>Signature</th></tr>';
                 
-                if (data.officialName1 || data.officialSignature1) {
-                    html += '<tr>';
-                    html += '<td>' + (data.officialName1 || '') + '</td>';
-                    html += '<td>' + (data.officialDesignation1 || '') + '</td>';
-                    html += '<td>' + (data.officialInitial1 || '') + '</td>';
-                    html += '<td>';
-                    if (data.officialSignature1) {
-                        html += `<img src="${data.officialSignature1}" class="official-signature-img">`;
-                    } else {
-                        html += 'No signature';
+                for (let i = 1; i <= 3; i++) {
+                    if (data['officialName' + i] || data['officialSignature' + i]) {
+                        html += '<td>' + (data['officialName' + i] || '') + '</td>';
+                        html += '<td>' + (data['officialDesignation' + i] || '') + '</td>';
+                        html += '<td>' + (data['officialInitial' + i] || '') + '</td>';
+                        html += '<td>';
+                        if (data['officialSignature' + i]) {
+                            html += '<img src="' + data['officialSignature' + i] + '" class="official-signature-img">';
+                        } else {
+                            html += 'No signature';
+                        }
+                        html += '</td>';
+                        html += '</tr>';
                     }
-                    html += '</td>';
-                    html += '</tr>';
                 }
+                html += '<\/table>';
                 
-                if (data.officialName2 || data.officialSignature2) {
-                    html += '<tr>';
-                    html += '<td>' + (data.officialName2 || '') + '</td>';
-                    html += '<td>' + (data.officialDesignation2 || '') + '</td>';
-                    html += '<td>' + (data.officialInitial2 || '') + '</td>';
-                    html += '<td>';
-                    if (data.officialSignature2) {
-                        html += `<img src="${data.officialSignature2}" class="official-signature-img">`;
-                    } else {
-                        html += 'No signature';
-                    }
-                    html += '</td>';
-                    html += '</tr>';
-                }
-                
-                if (data.officialName3 || data.officialSignature3) {
-                    html += '<tr>';
-                    html += '<td>' + (data.officialName3 || '') + '</td>';
-                    html += '<td>' + (data.officialDesignation3 || '') + '</td>';
-                    html += '<td>' + (data.officialInitial3 || '') + '</td>';
-                    html += '<td>';
-                    if (data.officialSignature3) {
-                        html += `<img src="${data.officialSignature3}" class="official-signature-img">`;
-                    } else {
-                        html += 'No signature';
-                    }
-                    html += '</td>';
-                    html += '</tr>';
-                }
-                
-                html += '</table>';
-                
+                // Granting section
                 if (data.grantingName || data.grantingSignature) {
                     html += '<div class="granting-section">';
-                    html += '<div class="granting-title">GRANTING AUTHORITY</div>';
+                    html += '<div class="granting-title">Name and official capacity of person granting authority</div>';
                     html += '<div class="granting-container">';
-                    
                     if (data.grantingSignature) {
-                        html += `<img src="${data.grantingSignature}" class="granting-signature-img" alt="Granting Signature">`;
+                        html += '<img src="' + data.grantingSignature + '" class="granting-signature-img" alt="Granting Signature">';
                     }
-                    
                     html += '<div class="granting-name">' + (data.grantingName || 'N/A') + '</div>';
-                    
+                    html += '<div class="granting-label">(Please sign over printed name.)</div>';
                     if (data.grantingDate) {
-                        html += '<div class="granting-date">Date: ' + data.grantingDate + '</div>';
+                        html += '<div class="granting-date">Date authority granted: ' + data.grantingDate + '</div>';
                     }
-                    
                     html += '</div>';
                     html += '</div>';
                 }
                 
-                html += '</div></div>'; 
+                html += '</div></div>';
                 
+                // Timestamp
                 if (data.timestamp) {
                     html += '<div class="timestamp">Generated: ' + new Date(data.timestamp).toLocaleString() + '</div>';
                 }
                 
-                html += '<button class="print-btn" onclick="window.print()"> PRINT </button>';
+                html += '<button class="print-btn" onclick="window.print()">PRINT FORM</button>';
                 
                 container.innerHTML = html;
                 

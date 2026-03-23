@@ -4,309 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>SSS Specimen Signature Card</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="form.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        .granting-section {
-            margin-top: 40px;
-            padding: 30px;
-            background: #f8f9ff;
-            border-radius: 12px;
-            border: 2px solid #cfe3ff;
-        }
-
-        .granting-title {
-            color: #003c8f;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .granting-container {
-            display: flex;
-            justify-content: center;
-        }
-
-        .granting-signature {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 500px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .granting-canvas {
-            width: 100%;
-            max-width: 400px;
-            height: 100px;
-            border: 2px solid #003c8f;
-            border-radius: 8px;
-            background: white;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 8px rgba(0,60,143,0.1);
-        }
-
-        .signature-actions-small {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 10px 0 20px;
-        }
-
-        .sign-btn-small, .clear-btn-small {
-            padding: 10px 30px;
-            font-size: 1rem;
-            border-radius: 25px;
-        }
-
-        #grantingName {
-            width: 100%;
-            max-width: 400px;
-            padding: 12px 20px;
-            border: 2px solid #003c8f;
-            border-radius: 8px;
-            font-size: 1rem;
-            margin: 5px 0 15px;
-            transition: all 0.3s;
-        }
-
-        .granting-label {
-            color: #666;
-            font-size: 0.9rem;
-            font-style: italic;
-            margin: 5px 0;
-            text-align: center;
-        }
-
-        .date-section {
-            margin: 30px 0;
-            text-align: right;
-        }
-
-        .date-label {
-            font-weight: 600;
-            color: #003c8f;
-            margin-bottom: 5px;
-        }
-
-        .date-input {
-            padding: 10px;
-            border: 1px solid #999;
-            border-radius: 4px;
-            font-size: 1rem;
-            width: 200px;
-        }
-
-        .bottom-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-top: 40px;
-            gap: 30px;
-        }
-
-        .qr-section {
-            flex: 1;
-            text-align: center;
-            padding: 30px;
-            background: #f0f7ff;
-            border-radius: 12px;
-            border: 2px solid #003c8f;
-            box-shadow: 0 4px 10px rgba(0,60,143,0.1);
-        }
-
-        .qr-section h3 {
-            color: #003c8f;
-            margin-bottom: 25px;
-            font-size: 1.4rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-bottom: 2px solid #ffd700;
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        #recipientEmail {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #003c8f;
-            border-radius: 50px;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-            background: white;
-            outline: none;
-        }
-
-        #recipientEmail:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
-        }
-
-        #recipientEmail.error {
-            border-color: #f44336;
-            animation: shake 0.3s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .email-note {
-            color: #666;
-            font-size: 0.9rem;
-            margin: 10px 0 5px;
-            font-style: italic;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 8px;
-            border-radius: 25px;
-        }
-
-        .action-buttons {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .review-btn, .primary-btn, .back-btn {
-            padding: 18px 30px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .review-btn {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .review-btn:hover {
-            background: #138496;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .primary-btn {
-            background: #003c8f;
-            color: white;
-        }
-
-        .back-btn {
-            background: #6c757d;
-            color: white;
-        }
-
-        .primary-btn:hover, .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .primary-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .success-message {
-            color: #28a745;
-            font-size: 1rem;
-            margin-top: 20px;
-            padding: 12px;
-            background: rgba(40, 167, 69, 0.1);
-            border-radius: 50px;
-            border: 1px solid #28a745;
-            display: none;
-            font-weight: 600;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #003c8f;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .modal-canvas {
-            width: 100%;
-            height: 200px;
-            border: 2px solid #003c8f;
-            border-radius: 8px;
-            margin: 20px 0;
-            cursor: crosshair;
-            background: white;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .modal-btn {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .cancel-btn {
-            background: #999;
-            color: white;
-        }
-
         .popup-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0,0,0,0.7);
             z-index: 9999;
             display: flex;
@@ -314,98 +22,82 @@
             justify-content: center;
         }
 
-        .popup-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .popup-content {
             background: white;
             border-radius: 12px;
-            padding: 30px;
-            max-width: 400px;
             width: 90%;
-            z-index: 10000;
-            text-align: center;
-        }
-
-        .popup-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .popup-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .popup-title.success {
-            color: #28a745;
-        }
-
-        .popup-title.error {
-            color: #f44336;
-        }
-
-        .popup-text {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            white-space: pre-line;
-        }
-
-        .popup-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .popup-btn {
-            padding: 10px 30px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .popup-btn.primary {
-            background: #003c8f;
-            color: white;
-        }
-
-        .instruction-popup {
             max-width: 600px;
+            max-height: 85vh;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
         }
 
-        .register-instruction-popup .popup-body {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .popup-header {
+            background: linear-gradient(135deg, #003c8f, #1a4fa2);
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .popup-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .popup-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .popup-body {
+            padding: 25px;
             max-height: 60vh;
             overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .register-instruction-popup .instruction-list {
-            margin: 0;
-        }
-        
-        .register-instruction-popup .important-note {
-            margin: 15px 0 0;
         }
 
         .instruction-list {
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .instruction-list li {
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .instruction-number {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             background: #ffd700;
             color: #003c8f;
             border-radius: 50%;
@@ -416,50 +108,454 @@
             flex-shrink: 0;
         }
 
+        .instruction-text {
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .instruction-text strong {
+            color: #003c8f;
+        }
+
         .important-note {
             background: #fff3cd;
             border: 1px solid #ffc107;
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
             margin-top: 20px;
         }
 
         .important-note h4 {
             color: #856404;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .important-note p {
+            font-size: 13px;
+            color: #856404;
+            line-height: 1.4;
         }
 
         .popup-footer {
-            padding: 20px;
+            padding: 18px 25px;
             text-align: center;
             border-top: 1px solid #e0e0e0;
+            background: #fafafa;
         }
 
-        .popup-header {
+        .popup-footer .primary-btn {
             background: #003c8f;
             color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .popup-close {
-            background: none;
             border: none;
-            color: white;
-            font-size: 24px;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
+        .popup-footer .primary-btn:hover {
+            background: #002a6a;
+            transform: translateY(-2px);
+        }
+
+        .instruction-btn {
+            background: #ffc107;
+            color: #003c8f;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .instruction-btn:hover {
+            background: #ffcd38;
+            transform: translateY(-2px);
+        }
+
+        /* QR Link Styles */
+        .qr-link-container {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border: 1px solid #cfe3ff;
+            text-align: center;
+        }
+
+        .qr-link-label {
+            font-weight: 600;
+            color: #003c8f;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .qr-link {
+            word-break: break-all;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #1976d2;
+            font-size: 0.85rem;
+            color: #1976d2;
+            text-decoration: none;
+            display: inline-block;
+            max-width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .qr-link:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(25, 118, 210, 0.2);
+        }
+
+        .qr-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #003c8f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .qr-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        #qrCanvas {
+            border: 2px solid #003c8f;
+            border-radius: 8px;
+            padding: 5px;
+            background: white;
+        }
+        
+        .save-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .save-btn:hover {
+            background: #218838;
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .review-btn, .back-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .review-btn {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .back-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .review-btn:hover {
+            background: #5a6268;
+        }
+        
+        .back-btn:hover {
+            background: #c82333;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .modal-canvas {
+            background: white;
+            border: 2px solid #003c8f;
+            border-radius: 8px;
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+            margin: 10px 0;
+        }
+        
+        .option-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .option-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .option-btn.draw {
+            background: #003c8f;
+            color: white;
+        }
+        
+        .option-btn.camera {
+            background: #28a745;
+            color: white;
+        }
+        
+        .option-btn.upload {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .option-btn.active {
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        #cameraVideo {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .modal-btn.cancel-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .modal-btn.save-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .modal-btn.clear-btn {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .upload-preview-area {
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .upload-preview-area img {
+            max-width: 100%;
+            max-height: 100px;
+            border: 1px solid #003c8f;
+            border-radius: 4px;
+        }
+        
+        .signature-canvas-small {
+            border: 1px solid #003c8f;
+            width: 100%;
+            height: 60px;
+            background: white;
+            display: block;
+            cursor: crosshair;
+        }
+        
+        .granting-canvas {
+            width: 100%;
+            height: 80px;
+            border: 1px solid #003c8f;
+            background: white;
+            display: block;
+            cursor: crosshair;
+        }
+        
+        .signature-actions-small {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .sign-btn-small, .clear-btn-small {
+            flex: 1;
+            padding: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .sign-btn-small {
+            background: #003c8f;
+            color: white;
+        }
+        
+        .clear-btn-small {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .error-message {
+            color: #f44336;
+            font-size: 11px;
+            display: none;
+            margin-top: 3px;
+        }
+        
+        .granting-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .date-input {
+            padding: 8px;
+            border: 1px solid #003c8f;
+            border-radius: 4px;
+        }
+        
+        .form-container {
+            width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border: 2px solid black;
+        }
+        
         @media (max-width: 768px) {
-            .bottom-actions {
-                flex-direction: column;
-            }
-            
-            .action-buttons {
+            .form-container {
                 width: 100%;
             }
+        }
+        
+        .info-table td {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+        
+        .officials-table th, .officials-table td {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+        
+        /* Header styling - same as index */
+        .header-with-logo {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 20px !important;
+            margin-bottom: 20px !important;
+            padding-bottom: 15px !important;
+            border-bottom: 2px solid #003c8f !important;
+        }
+        
+        .logo-container {
+            flex-shrink: 0 !important;
+        }
+        
+        .logo-container img {
+            width: 80px !important;
+            height: auto !important;
+            margin-bottom: 0 !important;
+        }
+        
+        .republic-header {
+            text-align: center !important;
+        }
+        
+        .republic-header h1, .republic-header h2 {
+            margin: 0 !important;
+        }
+        
+        .form-number {
+            font-size: 12px !important;
+            margin-top: 5px !important;
         }
     </style>
 </head>
@@ -468,12 +564,15 @@
         <div class="republic-header">
             <div class="header-with-logo">
                 <div class="logo-container">
-                    <img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='SSS';">
+                    <img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display='none';">
                 </div>
-                <h1>Republic of the Philippines</h1>
-                <h2>SOCIAL SECURITY SYSTEM</h2>
-                <div class="form-number">SSS Form L - 501 (07-94)</div>
+                <div>
+                    <h1>Republic of the Philippines</h1>
+                    <h2>SOCIAL SECURITY SYSTEM</h2>
+                    <div class="form-number">SSS Form L - 501 (07-94)</div>
+                </div>
             </div>
+            <button class="instruction-btn" onclick="showRegisterInstruction()">📋 Show Instructions</button>
         </div>
 
         <div class="form-title">
@@ -524,7 +623,7 @@
                             <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature1')">Clear</button>
                         </div>
                         <div id="officialError1" class="error-message">Signature required</div>
-                    </td>
+                     </td>
                 </tr>
                 <tr>
                     <td><input type="text" id="officialName2" placeholder="Full Name" required></td>
@@ -537,7 +636,7 @@
                             <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature2')">Clear</button>
                         </div>
                         <div id="officialError2" class="error-message">Signature required</div>
-                    </td>
+                     </td>
                 </tr>
                 <tr>
                     <td><input type="text" id="officialName3" placeholder="Full Name" required></td>
@@ -550,7 +649,7 @@
                             <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature3')">Clear</button>
                         </div>
                         <div id="officialError3" class="error-message">Signature required</div>
-                    </td>
+                     </td>
                 </tr>
             </tbody>
         </table>
@@ -559,14 +658,12 @@
             <div class="granting-title">Name and official capacity of person granting authority</div>
             <div class="granting-container">
                 <div class="granting-signature">
-                    <canvas class="granting-canvas" id="grantingSignature" width="400" height="100"></canvas>
-                    <div class="signature-actions-small">
-                        <button type="button" class="sign-btn-small" onclick="openModal('grantingSignature')">SIGN</button>
-                        <button type="button" class="clear-btn-small" onclick="clearCanvas('grantingSignature')">CLEAR</button>
+                    <input type="text" id="grantingName" placeholder="Full name and position" style="width: 100%; padding: 8px; margin-bottom: 10px;" required>
+                    <canvas class="granting-canvas" id="grantingSignature" width="400" height="80"></canvas>
+                    <div class="signature-actions-small" style="justify-content: center;">
+                        <button type="button" class="sign-btn-small" onclick="openModal('grantingSignature')">Sign</button>
+                        <button type="button" class="clear-btn-small" onclick="clearCanvas('grantingSignature')">Clear</button>
                     </div>
-                    
-                    <input type="text" id="grantingName" placeholder="Full name and position" required>
-                    
                     <div class="granting-label">(Please sign over printed name.)</div>
                     <div id="grantingError" class="error-message">Signature required</div>
                 </div>
@@ -580,18 +677,26 @@
 
         <div class="bottom-actions">
             <div class="qr-section">
-                <h3>SEND FORM TO EMAIL</h3>
-                
-                <input type="email" id="recipientEmail" placeholder="Enter your email address" required>
-                <div class="email-note">
-                    ✓ The QR code will be sent to your email
-                </div>
-                
-                <div style="display: none;">
+                <h3>OFFICIAL QR CODE</h3>
+                <div class="qr-code" id="qrCodeBox">
                     <canvas id="qrCanvas" width="180" height="180"></canvas>
                 </div>
                 
-                <div id="qrSuccess" class="success-message">✓ Form submitted! Email sent.</div>
+                <div class="qr-link-container" id="qrLinkContainer" style="display: none;">
+                    <div class="qr-link-label">🔗 DIRECT LINK (for PC users):</div>
+                    <a href="#" id="qrLink" class="qr-link" target="_blank">
+                        <i>🔗</i> Click here to view form summary
+                    </a>
+                    <div class="qr-note">Same content as scanning the QR code</div>
+                </div>
+                
+                <div class="save-section" id="saveSection" style="display: none;">
+                    <button class="save-btn" onclick="saveQRCode()">
+                        <span>💾</span> SAVE QR CODE
+                    </button>
+                </div>
+                
+                <div id="qrSuccess" class="success-message">✓ Uploaded to cloud! QR Code ready.</div>
             </div>
 
             <div class="action-buttons">
@@ -600,20 +705,24 @@
                 </button>
                 
                 <button class="primary-btn" type="button" id="submitBtn" onclick="submitSecondForm()">
-                    GENERATE & SEND QR CODE
+                    GENERATE QR CODE
                 </button>
                 
                 <button class="back-btn" onclick="goBackToIndex()">
-                    <span>←</span> BACK
+                    <span>←</span> BACK TO COMPANY REP AUTHORIZATION
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- INSTRUCTION POPUP -->
     <div id="registerInstructionPopup" class="popup-overlay" style="display: none;">
-        <div class="popup-content instruction-popup register-instruction-popup">
+        <div class="popup-content">
             <div class="popup-header">
-                <h3>IMPORTANT INFORMATION / INSTRUCTIONS</h3>
+                <h3>
+                    <span>📋</span>
+                    IMPORTANT INFORMATION / INSTRUCTIONS
+                </h3>
                 <button class="popup-close" onclick="closeRegisterInstruction()">✕</button>
             </div>
             <div class="popup-body">
@@ -645,7 +754,10 @@
                 </ul>
                 
                 <div class="important-note">
-                    <h4>⚠️ IMPORTANT REMINDER</h4>
+                    <h4>
+                        <span>⚠️</span>
+                        IMPORTANT REMINDER
+                    </h4>
                     <p>Make sure to accomplish all fields and provide specimen signatures of all authorized representatives. Incomplete forms will not be processed by SSS.</p>
                 </div>
             </div>
@@ -655,14 +767,48 @@
         </div>
     </div>
 
+    <!-- SIGNATURE MODAL - with Draw, Camera, and Upload options (same as index) -->
     <div id="signatureModal" class="modal">
         <div class="modal-content">
-            <h3>Draw Your Signature</h3>
-            <canvas id="modalCanvas" class="modal-canvas" width="400" height="200"></canvas>
-            <div class="modal-buttons">
-                <button class="modal-btn clear-btn" onclick="clearModalCanvas()">Clear</button>
-                <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn save-btn" onclick="saveSignature()">Save</button>
+            <h3>Add Your Signature</h3>
+            <div class="option-buttons">
+                <button class="option-btn draw" id="drawOptionBtn" onclick="selectDraw()">✏️ Draw</button>
+                <button class="option-btn camera" id="cameraOptionBtn" onclick="selectCamera()">📸 Take Photo</button>
+                <button class="option-btn upload" id="uploadOptionBtn" onclick="selectUpload()">📁 Upload</button>
+            </div>
+            
+            <!-- Draw Mode -->
+            <div id="drawMode" style="display: none;">
+                <canvas id="modalCanvas" class="modal-canvas" width="400" height="200"></canvas>
+                <div class="modal-buttons">
+                    <button class="modal-btn clear-btn" onclick="clearModalCanvas()">Clear</button>
+                    <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn save-btn" onclick="saveDrawSignature()">Save</button>
+                </div>
+            </div>
+            
+            <!-- Camera Mode -->
+            <div id="cameraMode" style="display: none;">
+                <div style="background: #000; border-radius: 8px; overflow: hidden;">
+                    <video id="cameraVideo" autoplay playsinline></video>
+                    <canvas id="cameraCanvas" style="display: none;"></canvas>
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-btn" onclick="capturePhoto()" style="background:#28a745; color:white;">📸 Capture</button>
+                    <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn save-btn" id="savePhotoBtn" style="display:none;" onclick="savePhotoSignature()">Save</button>
+                </div>
+                <div id="photoPreviewCapture" class="upload-preview-area"></div>
+            </div>
+            
+            <!-- Upload Mode -->
+            <div id="uploadMode" style="display: none;">
+                <input type="file" id="uploadFileInput" accept="image/*" style="margin: 10px 0; padding: 8px;">
+                <div id="uploadPreview" class="upload-preview-area"></div>
+                <div class="modal-buttons">
+                    <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn save-btn" onclick="saveUploadSignature()">Save</button>
+                </div>
             </div>
         </div>
     </div>
