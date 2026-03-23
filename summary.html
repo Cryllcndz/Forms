@@ -754,7 +754,6 @@
         margin: 10px 0 6px !important;
     }
 }
-/* 📱 MOBILE ONLY (SAFE FOR PRINT) */
 @media screen and (max-width: 768px) {
 
     body {
@@ -809,6 +808,43 @@
     .print-btn {
         width: 100%;
     }
+
+    /* 📱 FIX: SPECIMEN CARD TABLE (OFFICIALS) */
+.officials-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.officials-table table {
+    min-width: 600px; /* adjust if needed */
+}
+
+.officials-table th,
+.officials-table td {
+    white-space: nowrap; /* hindi mag-wrap yung names */
+}
+
+/* specific widths para hindi gumalaw */
+.officials-table th:nth-child(1),
+.officials-table td:nth-child(1) {
+    min-width: 180px; /* Printed Name */
+}
+
+.officials-table th:nth-child(2),
+.officials-table td:nth-child(2) {
+    min-width: 150px; /* Designation */
+}
+
+.officials-table th:nth-child(3),
+.officials-table td:nth-child(3) {
+    min-width: 80px; /* Initial */
+}
+
+.officials-table th:nth-child(4),
+.officials-table td:nth-child(4) {
+    min-width: 120px; /* Signature */
+}
 }
 </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
