@@ -510,6 +510,9 @@
         @media (max-width: 768px) {
             .form-container {
                 width: 100%;
+                padding: 12px;
+                margin: 0;
+                box-sizing: border-box;
             }
         }
         
@@ -556,6 +559,254 @@
         .form-number {
             font-size: 12px !important;
             margin-top: 5px !important;
+        }
+
+        /* ===== MOBILE LAYOUT FIXES - ADDED ONLY ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                background: #f0f0f0;
+            }
+            
+            .form-container {
+                width: 100% !important;
+                padding: 12px !important;
+                margin: 0 !important;
+                border-left: none !important;
+                border-right: none !important;
+                border-radius: 0 !important;
+                box-sizing: border-box !important;
+            }
+            
+            .header-with-logo {
+                flex-direction: column !important;
+                gap: 12px !important;
+                text-align: center !important;
+            }
+            
+            .logo-container img {
+                width: 60px !important;
+            }
+            
+            .republic-header h1 {
+                font-size: 16px !important;
+            }
+            
+            .republic-header h2 {
+                font-size: 14px !important;
+            }
+            
+            .form-number {
+                font-size: 10px !important;
+            }
+            
+            .form-title h2 {
+                font-size: 16px !important;
+                text-align: center !important;
+                margin: 15px 0 !important;
+            }
+            
+            .instruction-btn {
+                font-size: 12px !important;
+                padding: 6px 15px !important;
+            }
+            
+            /* Table responsive - make them scrollable or block */
+            .info-table, .officials-table {
+                display: block !important;
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+            
+            .info-table td, .officials-table td, .officials-table th {
+                white-space: normal !important;
+                word-break: break-word !important;
+            }
+            
+            /* Make officials table responsive */
+            .officials-table {
+                display: block !important;
+                width: 100% !important;
+            }
+            
+            .officials-table thead, .officials-table tbody, .officials-table tr {
+                display: block !important;
+            }
+            
+            .officials-table tr {
+                margin-bottom: 20px !important;
+                border-bottom: 2px solid #003c8f !important;
+                padding-bottom: 15px !important;
+            }
+            
+            .officials-table th, .officials-table td {
+                display: flex !important;
+                flex-direction: column !important;
+                text-align: left !important;
+                padding: 8px !important;
+                border: none !important;
+                border-bottom: 1px solid #ddd !important;
+            }
+            
+            .officials-table th {
+                background: #003c8f !important;
+                color: white !important;
+                font-size: 12px !important;
+            }
+            
+            .officials-table td:before {
+                content: attr(data-label);
+                font-weight: bold;
+                margin-bottom: 5px;
+                display: block;
+                color: #003c8f;
+                font-size: 12px;
+            }
+            
+            /* Add data labels for responsive table */
+            .officials-table td:nth-child(1):before { content: "Printed Name: "; }
+            .officials-table td:nth-child(2):before { content: "Designation: "; }
+            .officials-table td:nth-child(3):before { content: "Initial: "; }
+            .officials-table td:nth-child(4):before { content: "Signature: "; }
+            
+            .signature-canvas-small, .granting-canvas {
+                width: 100% !important;
+                height: 70px !important;
+            }
+            
+            .signature-actions-small {
+                justify-content: center !important;
+            }
+            
+            .granting-container {
+                width: 100% !important;
+            }
+            
+            .date-section {
+                margin: 15px 0 !important;
+                text-align: left !important;
+            }
+            
+            .date-input {
+                width: 100% !important;
+                margin-top: 5px !important;
+                box-sizing: border-box !important;
+            }
+            
+            .qr-section {
+                margin: 15px 0 !important;
+            }
+            
+            #qrCanvas {
+                width: 140px !important;
+                height: 140px !important;
+            }
+            
+            .qr-link-container {
+                padding: 10px !important;
+            }
+            
+            .qr-link {
+                font-size: 11px !important;
+                padding: 8px !important;
+            }
+            
+            .action-buttons {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+            
+            .review-btn, .primary-btn, .back-btn {
+                width: 100% !important;
+                padding: 12px !important;
+                font-size: 14px !important;
+            }
+            
+            .option-buttons {
+                flex-wrap: wrap !important;
+            }
+            
+            .option-btn {
+                font-size: 12px !important;
+                padding: 8px !important;
+            }
+            
+            .modal-content {
+                width: 95% !important;
+                padding: 15px !important;
+            }
+            
+            .modal-canvas {
+                height: 150px !important;
+            }
+            
+            #cameraVideo {
+                height: 180px !important;
+            }
+            
+            .popup-content {
+                width: 95% !important;
+                margin: 10px !important;
+            }
+            
+            .popup-header h3 {
+                font-size: 1rem !important;
+            }
+            
+            .popup-body {
+                padding: 15px !important;
+            }
+            
+            .instruction-list li {
+                gap: 10px !important;
+            }
+            
+            .instruction-number {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 12px !important;
+            }
+            
+            .instruction-text {
+                font-size: 12px !important;
+            }
+            
+            .important-note p {
+                font-size: 11px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 10px !important;
+            }
+            
+            .form-title h2 {
+                font-size: 14px !important;
+            }
+            
+            .info-table td, .officials-table td {
+                font-size: 12px !important;
+            }
+            
+            input, .date-input {
+                font-size: 12px !important;
+                padding: 6px !important;
+            }
+            
+            .signature-canvas-small, .granting-canvas {
+                height: 60px !important;
+            }
+            
+            .qr-link-label {
+                font-size: 11px !important;
+            }
+            
+            .qr-note {
+                font-size: 10px !important;
+            }
         }
     </style>
 </head>
@@ -613,43 +864,43 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" id="officialName1" placeholder="Full Name" required></td>
-                    <td><input type="text" id="officialDesignation1" placeholder="Designation" required></td>
-                    <td><input type="text" id="officialInitial1" placeholder="Initial" required></td>
-                    <td>
+                    <td data-label="Printed Name"><input type="text" id="officialName1" placeholder="Full Name" required></td>
+                    <td data-label="Designation"><input type="text" id="officialDesignation1" placeholder="Designation" required></td>
+                    <td data-label="Initial"><input type="text" id="officialInitial1" placeholder="Initial" required></td>
+                    <td data-label="Signature">
                         <canvas class="signature-canvas-small" id="officialSignature1" width="150" height="60"></canvas>
                         <div class="signature-actions-small">
                             <button type="button" class="sign-btn-small" onclick="openModal('officialSignature1')">Sign</button>
                             <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature1')">Clear</button>
                         </div>
                         <div id="officialError1" class="error-message">Signature required</div>
-                     </td>
+                      </td>
                 </tr>
                 <tr>
-                    <td><input type="text" id="officialName2" placeholder="Full Name" required></td>
-                    <td><input type="text" id="officialDesignation2" placeholder="Designation" required></td>
-                    <td><input type="text" id="officialInitial2" placeholder="Initial" required></td>
-                    <td>
+                    <td data-label="Printed Name"><input type="text" id="officialName2" placeholder="Full Name" required></td>
+                    <td data-label="Designation"><input type="text" id="officialDesignation2" placeholder="Designation" required></td>
+                    <td data-label="Initial"><input type="text" id="officialInitial2" placeholder="Initial" required></td>
+                    <td data-label="Signature">
                         <canvas class="signature-canvas-small" id="officialSignature2" width="150" height="60"></canvas>
                         <div class="signature-actions-small">
                             <button type="button" class="sign-btn-small" onclick="openModal('officialSignature2')">Sign</button>
                             <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature2')">Clear</button>
                         </div>
                         <div id="officialError2" class="error-message">Signature required</div>
-                     </td>
+                      </td>
                 </tr>
                 <tr>
-                    <td><input type="text" id="officialName3" placeholder="Full Name" required></td>
-                    <td><input type="text" id="officialDesignation3" placeholder="Designation" required></td>
-                    <td><input type="text" id="officialInitial3" placeholder="Initial" required></td>
-                    <td>
+                    <td data-label="Printed Name"><input type="text" id="officialName3" placeholder="Full Name" required></td>
+                    <td data-label="Designation"><input type="text" id="officialDesignation3" placeholder="Designation" required></td>
+                    <td data-label="Initial"><input type="text" id="officialInitial3" placeholder="Initial" required></td>
+                    <td data-label="Signature">
                         <canvas class="signature-canvas-small" id="officialSignature3" width="150" height="60"></canvas>
                         <div class="signature-actions-small">
                             <button type="button" class="sign-btn-small" onclick="openModal('officialSignature3')">Sign</button>
                             <button type="button" class="clear-btn-small" onclick="clearCanvas('officialSignature3')">Clear</button>
                         </div>
                         <div id="officialError3" class="error-message">Signature required</div>
-                     </td>
+                      </td>
                 </tr>
             </tbody>
         </table>
