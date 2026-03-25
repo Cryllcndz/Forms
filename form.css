@@ -137,6 +137,10 @@ input {
     color: #555;
 }
 
+.company-info-section {
+    -webkit-overflow-scrolling: touch;
+}
+
 /* AUTH TEXT */
 .authorization-text {
     margin: 20px 0;
