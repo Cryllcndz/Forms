@@ -773,21 +773,49 @@ window.onload = function() {
     const canvas1 = document.getElementById('specimenSignature1');
     const canvas2 = document.getElementById('employerSignature');
     
-    // CHECK IF QR WAS GENERATED - CLEAR AUTO-SAVE FIRST
+    // CHECK IF QR WAS GENERATED - CLEAR ALL AUTO-SAVE DATA
     const qrGenerated = localStorage.getItem('qrGenerated');
     if (qrGenerated === 'true') {
-        clearForm1AutoSave();
+        // Clear all auto-save data
+        localStorage.removeItem('form1AutoSave');
+        localStorage.removeItem('firstFormData');
         localStorage.removeItem('qrGenerated');
-        console.log("🗑️ Cleared auto-save because QR was generated");
-    }
-    
-    // Load auto-save
-    const hasSavedData = loadAutoSave();
-    
-    // Only clear canvases if there's no saved data
-    if (!hasSavedData) {
+        console.log("🗑️ Cleared all auto-save data because QR was generated");
+        
+        // Reset photoUploaded flag
+        photoUploaded = false;
+        
+        // Clear all input fields
+        document.getElementById('employerName').value = '';
+        document.getElementById('employerId').value = '';
+        document.getElementById('address').value = '';
+        document.getElementById('telephone').value = '';
+        document.getElementById('certName').value = '';
+        document.getElementById('ssNumber').value = '';
+        document.getElementById('specimenName1').value = '';
+        document.getElementById('employerName2').value = '';
+        
+        // Clear photo preview
+        const preview = document.getElementById('photoPreview');
+        const placeholder = document.getElementById('photoPlaceholder');
+        preview.src = '#';
+        preview.style.display = 'none';
+        placeholder.style.display = 'flex';
+        
+        // Clear canvases
         if (canvas1) clearCanvas('specimenSignature1');
         if (canvas2) clearCanvas('employerSignature');
+        
+        console.log("✅ All fields cleared");
+    } else {
+        // Load auto-save only if QR was NOT generated
+        const hasSavedData = loadAutoSave();
+        
+        // Only clear canvases if there's no saved data
+        if (!hasSavedData) {
+            if (canvas1) clearCanvas('specimenSignature1');
+            if (canvas2) clearCanvas('employerSignature');
+        }
     }
     
     if (canvas1) initDrawing(canvas1);
