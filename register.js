@@ -705,35 +705,6 @@ async function submitSecondForm() {
     }
 }
 
-function goToReviewPage() {
-    autoSaveForm2();
-    
-    const form2Data = {
-        registeredName: document.getElementById('registeredName').value,
-        idNumber: document.getElementById('idNumber').value,
-        companyAddress: document.getElementById('companyAddress').value,
-        telNumber: document.getElementById('telNumber').value,
-        officialName1: document.getElementById('officialName1').value,
-        officialDesignation1: document.getElementById('officialDesignation1').value,
-        officialInitial1: document.getElementById('officialInitial1').value,
-        officialSignature1: document.getElementById('officialSignature1').toDataURL(),
-        officialName2: document.getElementById('officialName2').value,
-        officialDesignation2: document.getElementById('officialDesignation2').value,
-        officialInitial2: document.getElementById('officialInitial2').value,
-        officialSignature2: document.getElementById('officialSignature2').toDataURL(),
-        officialName3: document.getElementById('officialName3').value,
-        officialDesignation3: document.getElementById('officialDesignation3').value,
-        officialInitial3: document.getElementById('officialInitial3').value,
-        officialSignature3: document.getElementById('officialSignature3').toDataURL(),
-        grantingName: document.getElementById('grantingName').value,
-        grantingSignature: document.getElementById('grantingSignature').toDataURL(),
-        grantingDate: document.getElementById('grantingDate').value
-    };
-    
-    localStorage.setItem('reviewFormData', JSON.stringify(form2Data));
-    window.location.href = 'review.html';
-}
-
 function reviewForm() {
     if (!validateSecondForm()) {
         if (!confirm('Some fields are incomplete. Continue to review anyway?')) return;
