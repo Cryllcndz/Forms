@@ -1,4 +1,4 @@
-// 🔥 FIREBASE INIT (ADD THIS)
+// Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCfQTN7UTRcW9lBm-rhRqyAOcT5gFZDJIs",
     authDomain: "sss-qr-system-39b59.firebaseapp.com",
@@ -8,30 +8,9 @@ const firebaseConfig = {
     appId: "1:81090026028:web:91dfd833462e2d95434f89"
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
-
-async function autoSaveToFirebase(formData) {
-    try {
-        const draftId = localStorage.getItem('form1DraftId') || 
-                        'DRAFT_' + Date.now();
-
-        await db.collection('sss-drafts').doc(draftId).set({
-            ...formData,
-            updatedAt: new Date().toISOString()
-        });
-
-        localStorage.setItem('form1DraftId', draftId);
-
-        console.log("☁️ Auto-saved to Firebase:", draftId);
-    } catch (error) {
-        console.error("❌ Firebase auto-save error:", error);
-    }
-}
 
 let photoUploaded = false;
 
@@ -145,6 +124,8 @@ function clearCanvas(canvasId) {
 function autoSaveForm1() {
     const specimenCanvas = document.getElementById('specimenSignature1');
     const employerCanvas = document.getElementById('employerSignature');
+    const photoPreview = document.getElementById('photoPreview');
+    
     const form1Data = {
         employerName: document.getElementById('employerName')?.value || '',
         employerId: document.getElementById('employerId')?.value || '',
@@ -154,16 +135,14 @@ function autoSaveForm1() {
         ssNumber: document.getElementById('ssNumber')?.value || '',
         specimenName1: document.getElementById('specimenName1')?.value || '',
         employerName2: document.getElementById('employerName2')?.value || '',
-        photo: document.getElementById('photoPreview')?.src || '',
+        photo: photoPreview?.src || '',
         specimenSignature1: specimenCanvas?.toDataURL() || '',
         employerSignature: employerCanvas?.toDataURL() || '',
         photoUploaded: photoUploaded,
         lastSaved: new Date().toISOString()
     };
-localStorage.setItem('form1AutoSave', JSON.stringify(form1Data));
-
-// 🔥 ADD THIS (Firebase sync)
-autoSaveToFirebase(form1Data);    console.log("💾 Form 1 auto-saved");
+    localStorage.setItem('form1AutoSave', JSON.stringify(form1Data));
+    console.log("💾 Form 1 auto-saved at:", new Date().toLocaleTimeString());
 }
 
 function loadCanvasFromData(canvasId, dataUrl) {
@@ -207,7 +186,7 @@ function loadAutoSave() {
             if (data.specimenSignature1) loadCanvasFromData('specimenSignature1', data.specimenSignature1);
             if (data.employerSignature) loadCanvasFromData('employerSignature', data.employerSignature);
             
-            console.log("📂 Form 1 auto-save loaded");
+            console.log("📂 Form 1 auto-save loaded from:", new Date(data.lastSaved).toLocaleString());
             return true;
         } catch (e) {
             console.error("Error loading auto-save:", e);
@@ -218,7 +197,7 @@ function loadAutoSave() {
 
 function clearForm1AutoSave() {
     localStorage.removeItem('form1AutoSave');
-    console.log("🗑️ Form 1 auto-save cleared after QR generation");
+    console.log("🗑️ Form 1 auto-save cleared");
 }
 
 function setupAutoSave() {
@@ -237,9 +216,10 @@ function setupAutoSave() {
     }
 }
 
-const photoInput = document.getElementById('photoInput');
-if (photoInput) {
-    photoInput.addEventListener('change', function(e) {
+// Single photo input handler
+const photoInputElement = document.getElementById('photoInput');
+if (photoInputElement) {
+    photoInputElement.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -785,7 +765,7 @@ window.addEventListener('storage', function(e) {
     if (e.key === 'clearForm1AutoSave' && e.newValue === 'true') {
         clearForm1AutoSave();
         localStorage.removeItem('clearForm1AutoSave');
-        console.log("🗑️ Form 1 auto-save cleared after QR generation");
+        console.log("🗑️ Form 1 auto-save cleared");
     }
 });
 
@@ -793,20 +773,29 @@ window.onload = function() {
     const canvas1 = document.getElementById('specimenSignature1');
     const canvas2 = document.getElementById('employerSignature');
     
-    if (canvas1) clearCanvas('specimenSignature1');
-    if (canvas2) clearCanvas('employerSignature');
-    
-    if (canvas1) initDrawing(canvas1);
-    if (canvas2) initDrawing(canvas2);
-    
-    loadAutoSave();
-    setupAutoSave();
-    
+    // CHECK IF QR WAS GENERATED - CLEAR AUTO-SAVE FIRST
     const qrGenerated = localStorage.getItem('qrGenerated');
     if (qrGenerated === 'true') {
         clearForm1AutoSave();
         localStorage.removeItem('qrGenerated');
+        console.log("🗑️ Cleared auto-save because QR was generated");
     }
+    
+    // Load auto-save
+    const hasSavedData = loadAutoSave();
+    
+    // Only clear canvases if there's no saved data
+    if (!hasSavedData) {
+        if (canvas1) clearCanvas('specimenSignature1');
+        if (canvas2) clearCanvas('employerSignature');
+    }
+    
+    if (canvas1) initDrawing(canvas1);
+    if (canvas2) initDrawing(canvas2);
+    
+    setupAutoSave();
+    
+    console.log("✅ Index page loaded, Firebase connected");
 };
 
 window.openModal = openModal;
