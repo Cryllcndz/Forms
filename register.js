@@ -50,7 +50,7 @@ function autoSaveForm2() {
     };
     
     localStorage.setItem('form2AutoSave', JSON.stringify(form2Data));
-    console.log("💾 Auto-saved at:", new Date().toLocaleTimeString());
+    console.log("💾 Form 2 auto-saved at:", new Date().toLocaleTimeString());
 }
 
 function loadAutoSave() {
@@ -84,7 +84,7 @@ function loadAutoSave() {
             if (data.officialSignature3) loadCanvasFromData('officialSignature3', data.officialSignature3);
             if (data.grantingSignature) loadCanvasFromData('grantingSignature', data.grantingSignature);
             
-            console.log("📂 Auto-save loaded from:", new Date(data.lastSaved).toLocaleString());
+            console.log("📂 Form 2 auto-save loaded from:", new Date(data.lastSaved).toLocaleString());
             return true;
         } catch (e) {
             console.error("Error loading auto-save:", e);
@@ -173,7 +173,14 @@ window.addEventListener('load', function() {
     }
     
     const canvases = ['officialSignature1', 'officialSignature2', 'officialSignature3', 'grantingSignature'];
-    canvases.forEach(id => clearCanvas(id));
+    canvases.forEach(id => {
+        const canvas = document.getElementById(id);
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+    });
     
     loadAutoSave();
     setupAutoSave();
@@ -183,6 +190,10 @@ window.addEventListener('load', function() {
 
 function goBackToIndex() {
     window.location.href = 'index.html';
+}
+
+function goToReviewPage() {
+    window.location.href = 'review.html';
 }
 
 let isDrawing = false;
@@ -203,6 +214,7 @@ function clearCanvas(canvasId) {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     canvasSigned[canvasId] = false;
+    autoSaveForm2();
 }
 
 function selectDraw() {
@@ -634,7 +646,13 @@ async function generateQRCode() {
             setTimeout(() => qrSuccess.style.display = 'none', 3000);
         }
         
-        console.log("✅ QR Code generated successfully!");
+        // CLEAR ALL DATA AFTER QR GENERATION
+        localStorage.removeItem('form1AutoSave');
+        localStorage.removeItem('form2AutoSave');
+        localStorage.removeItem('firstFormData');
+        localStorage.setItem('qrGenerated', 'true');
+        
+        console.log("✅ QR Code generated successfully and all data cleared!");
         return summaryUrl;
     } catch (error) {
         console.error('❌ Error in generateQRCode:', error);

@@ -773,34 +773,49 @@ window.onload = function() {
     const canvas1 = document.getElementById('specimenSignature1');
     const canvas2 = document.getElementById('employerSignature');
     
-    // CHECK IF QR WAS GENERATED - CLEAR ALL AUTO-SAVE DATA
+    // Check if QR was generated OR page was refreshed
     const qrGenerated = localStorage.getItem('qrGenerated');
-    if (qrGenerated === 'true') {
-        // Clear all auto-save data
+    const pageRefreshed = sessionStorage.getItem('pageRefreshed');
+    
+    // If QR was generated OR page was refreshed, clear all data
+    if (qrGenerated === 'true' || pageRefreshed === 'true') {
+        // Clear all data
         localStorage.removeItem('form1AutoSave');
         localStorage.removeItem('firstFormData');
         localStorage.removeItem('qrGenerated');
-        console.log("🗑️ Cleared all auto-save data because QR was generated");
+        sessionStorage.removeItem('pageRefreshed');
+        console.log("🗑️ Cleared all data");
         
         // Reset photoUploaded flag
         photoUploaded = false;
         
         // Clear all input fields
-        document.getElementById('employerName').value = '';
-        document.getElementById('employerId').value = '';
-        document.getElementById('address').value = '';
-        document.getElementById('telephone').value = '';
-        document.getElementById('certName').value = '';
-        document.getElementById('ssNumber').value = '';
-        document.getElementById('specimenName1').value = '';
-        document.getElementById('employerName2').value = '';
+        const employerName = document.getElementById('employerName');
+        const employerId = document.getElementById('employerId');
+        const address = document.getElementById('address');
+        const telephone = document.getElementById('telephone');
+        const certName = document.getElementById('certName');
+        const ssNumber = document.getElementById('ssNumber');
+        const specimenName1 = document.getElementById('specimenName1');
+        const employerName2 = document.getElementById('employerName2');
+        
+        if (employerName) employerName.value = '';
+        if (employerId) employerId.value = '';
+        if (address) address.value = '';
+        if (telephone) telephone.value = '';
+        if (certName) certName.value = '';
+        if (ssNumber) ssNumber.value = '';
+        if (specimenName1) specimenName1.value = '';
+        if (employerName2) employerName2.value = '';
         
         // Clear photo preview
         const preview = document.getElementById('photoPreview');
         const placeholder = document.getElementById('photoPlaceholder');
-        preview.src = '#';
-        preview.style.display = 'none';
-        placeholder.style.display = 'flex';
+        if (preview) {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+        if (placeholder) placeholder.style.display = 'flex';
         
         // Clear canvases
         if (canvas1) clearCanvas('specimenSignature1');
@@ -808,7 +823,10 @@ window.onload = function() {
         
         console.log("✅ All fields cleared");
     } else {
-        // Load auto-save only if QR was NOT generated
+        // Set flag that page was loaded
+        sessionStorage.setItem('pageRefreshed', 'true');
+        
+        // Load auto-save
         const hasSavedData = loadAutoSave();
         
         // Only clear canvases if there's no saved data
