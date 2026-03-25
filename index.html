@@ -26,7 +26,7 @@
         }
 
         .logo-container img {
-            width: 80px !important;
+            width: 85px !important;
             height: 70px !important;
             margin-bottom: 0 !important;
         }
@@ -298,6 +298,32 @@
             background: white !important;
         }
 
+        /* Photo upload button styling - single button only */
+        .photo-upload-wrapper {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .photo-upload-label {
+            display: inline-block;
+            background: #6c757d;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        .photo-upload-label:hover {
+            background: #5a6268;
+        }
+
+        /* Hide the default file input */
+        .photo-input {
+            display: none;
+        }
+
         /* ===== MOBILE LAYOUT FIXES - ADDED ONLY ===== */
         @media (max-width: 768px) {
             body {
@@ -467,10 +493,6 @@
                 font-size: 11px !important;
             }
             
-            .signature-label {
-                font-size: 12px !important;
-            }
-            
             .modal-btn {
                 padding: 6px 15px !important;
                 font-size: 12px !important;
@@ -524,6 +546,9 @@
                     <img id="photoPreview" class="photo-preview" src="#">
                     <div class="photo-placeholder" id="photoPlaceholder"><i>📷</i><span>No image</span></div>
                 </div>
+                <div class="photo-upload-wrapper">
+                    <label class="photo-upload-label" id="photoUploadLabel">Choose File</label>
+                </div>
                 <input type="file" id="photoInput" class="photo-input" accept="image/*">
                 <div id="photoError" class="error-message">Please upload a 1x1 photo</div>
             </div>
@@ -539,7 +564,9 @@
     <div class="signatures-side-by-side">
         <!-- SPECIMEN SIGNATURE -->
         <div class="signature-item">
-            <div class="signature-label">SPECIMEN SIGNATURE</div>
+            <div class="signature-label">Specimen Signature
+                
+            </div>
             <div class="signature-canvas-container">
                 <canvas id="specimenSignature1" class="signature-canvas" width="400" height="100"></canvas>
             </div>
@@ -553,7 +580,7 @@
 
         <!-- SIGNATURE OVER PRINTED NAME -->
         <div class="signature-item">
-            <div class="signature-label">SIGNATURE OVER PRINTED NAME of Employer/Owner</div>
+            <div class="signature-label">Signature Over Printed Name of Employer/Owner</div>
             <div class="signature-canvas-container">
                 <canvas id="employerSignature" class="employer-canvas" width="400" height="100"></canvas>
             </div>
@@ -625,6 +652,43 @@
     </div>
 </div>
 
+<script>
+    // Photo upload functionality - single button only
+    const photoBox = document.getElementById('photoBox');
+    const photoInput = document.getElementById('photoInput');
+    const photoUploadLabel = document.getElementById('photoUploadLabel');
+    const photoPreview = document.getElementById('photoPreview');
+    const photoPlaceholder = document.getElementById('photoPlaceholder');
+    const photoError = document.getElementById('photoError');
+
+    function openFilePicker() {
+        photoInput.click();
+    }
+
+    // Only the button opens file picker (removed photoBox click)
+    photoUploadLabel.addEventListener('click', openFilePicker);
+
+    photoInput.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                photoPreview.src = ev.target.result;
+                photoPreview.style.display = 'block';
+                photoPlaceholder.style.display = 'none';
+                photoError.style.display = 'none';
+                localStorage.setItem('employerPhoto', ev.target.result);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+    
+    const savedPhoto = localStorage.getItem('employerPhoto');
+    if (savedPhoto) {
+        photoPreview.src = savedPhoto;
+        photoPreview.style.display = 'block';
+        photoPlaceholder.style.display = 'none';
+    }
+</script>
 <script src="index.js"></script>
 </body>
 </html>
