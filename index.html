@@ -4,18 +4,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <meta charset="UTF-8">
     <title>SSS Company Representative Authorization</title>
-    <link rel="stylesheet" href="form.css">
     <style>
-        /* Override conflicting form.css styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #e9ecef;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 16px;
+        }
+
+        /* Main card container — fixed for mobile */
+        .form-container {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            padding: 20px 18px 32px;
+            max-width: 700px;
+            margin: 0 auto;
+            transition: all 0.2s;
+        }
+
+        /* header with logo — responsive flex wrap on tiny screens */
         .header-with-logo {
             display: flex !important;
             flex-direction: row !important;
             align-items: center !important;
             justify-content: center !important;
-            gap: 20px !important;
+            gap: 16px !important;
             margin-bottom: 20px !important;
-            padding-bottom: 15px !important;
+            padding-bottom: 16px !important;
             border-bottom: 2px solid #003c8f !important;
+            flex-wrap: wrap;
         }
 
         .logo-container {
@@ -23,36 +47,323 @@
         }
 
         .logo-container img {
-            width: 80px !important;
-            height: 70px !important;
+            width: 70px !important;
+            height: auto !important;
+            max-height: 65px;
+            object-fit: contain;
             margin-bottom: 0 !important;
         }
 
         .sss-header {
             text-align: left !important;
+            flex: 1;
+            min-width: 160px;
         }
 
         .sss-header h1 {
             font-size: 18px !important;
-            font-weight: bold !important;
-            margin: 0 0 5px 0 !important;
+            font-weight: 700 !important;
+            margin: 0 0 4px 0 !important;
             color: #003c8f !important;
+            letter-spacing: -0.2px;
         }
 
         .branch {
-            font-size: 14px !important;
-            font-weight: bold !important;
-            color: hwb(0 38% 62%) !important;
-            margin: 5px 0 !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: #c62828 !important;
+            margin: 4px 0 !important;
         }
 
         .address, .tel {
-            font-size: 12px !important;
-            color: #555 !important;
+            font-size: 11px !important;
+            color: #4b5563 !important;
             margin: 2px 0 !important;
+            line-height: 1.3;
         }
 
-        /* Additional modal styles not in form.css */
+        .form-title h2 {
+            font-size: 1.35rem;
+            text-align: center;
+            color: #003c8f;
+            margin: 12px 0 20px;
+            font-weight: 700;
+            border-left: 4px solid #ffc107;
+            padding-left: 12px;
+            background: #f0f4fc;
+            border-radius: 40px;
+            line-height: 1.3;
+        }
+
+        /* Employer section - grid on mobile */
+        .employer-header {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        @media (min-width: 640px) {
+            .employer-header {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .employer-fields {
+                flex: 2;
+            }
+            .photo-section {
+                flex: 1;
+            }
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table td {
+            padding: 8px 6px;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        .info-table td:first-child {
+            font-weight: 600;
+            color: #1e293b;
+            width: 38%;
+        }
+
+        input, .inline-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            font-size: 14px;
+            background: #ffffff;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #003c8f;
+            box-shadow: 0 0 0 2px rgba(0,60,143,0.2);
+        }
+
+        .photo-section {
+            text-align: center;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 24px;
+        }
+
+        .photo-label {
+            font-weight: 700;
+            color: #003c8f;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .photo-box {
+            width: 100%;
+            max-width: 130px;
+            margin: 0 auto;
+            background: white;
+            border: 1.5px dashed #aaa;
+            border-radius: 16px;
+            padding: 12px 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            aspect-ratio: 1 / 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-box:hover {
+            border-color: #003c8f;
+            background: #f0f4fa;
+        }
+
+        .photo-preview {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        .photo-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6c757d;
+            font-size: 12px;
+        }
+        .photo-placeholder i {
+            font-size: 32px;
+            margin-bottom: 4px;
+        }
+
+        .photo-input {
+            display: none;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 11px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        /* Authorization text */
+        .authorization-text {
+            margin: 20px 0 18px;
+            background: #fefce8;
+            padding: 14px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.45;
+            color: #1e293b;
+        }
+        .inline-input {
+            width: auto;
+            min-width: 140px;
+            display: inline-block;
+            margin: 0 4px;
+            padding: 6px 10px;
+        }
+
+        /* Signatures side by side — column on mobile */
+        .signatures-side-by-side {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin: 20px 0 30px;
+        }
+
+        @media (min-width: 600px) {
+            .signatures-side-by-side {
+                flex-direction: row;
+                gap: 24px;
+            }
+            .signature-item {
+                flex: 1;
+            }
+        }
+
+        .signature-item {
+            background: #fefefe;
+            border-radius: 24px;
+            padding: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .signature-label {
+            font-weight: 700;
+            text-align: center;
+            background: #003c8f;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 40px;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+        }
+
+        .signature-canvas-container {
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .signature-canvas, .employer-canvas {
+            width: 100%;
+            height: 110px;
+            background: white;
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .signature-actions {
+            display: flex;
+            gap: 12px;
+            margin: 10px 0;
+        }
+
+        .sign-btn, .clear-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sign-btn {
+            background: #003c8f;
+            color: white;
+        }
+        .clear-btn {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .name-input {
+            margin-top: 10px;
+            width: 100%;
+            border-radius: 40px;
+        }
+
+        .noted-section {
+            margin-top: 28px;
+            text-align: right;
+            border-top: 1px dashed #ccc;
+            padding-top: 18px;
+        }
+        .noted-line {
+            border-bottom: 1.5px solid #000;
+            width: 220px;
+            margin-left: auto;
+            margin-top: 6px;
+        }
+        .noted-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        .noted-title {
+            font-size: 0.8rem;
+            color: #475569;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 32px;
+        }
+        .primary-btn {
+            background: #003c8f;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: 0.2s;
+            width: 100%;
+            max-width: 280px;
+        }
+        .primary-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* MODAL STYLES - fully responsive */
         .modal {
             display: none;
             position: fixed;
@@ -60,247 +371,109 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.75);
             align-items: center;
             justify-content: center;
-            z-index: 1000;
+            z-index: 2000;
+            backdrop-filter: blur(2px);
         }
-
         .modal-content {
             background: white;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
-            padding: 20px;
+            border-radius: 32px;
+            width: 92%;
+            max-width: 480px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 20px 18px 26px;
             text-align: center;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
         }
-
         .modal-canvas {
             background: white;
             border: 2px solid #003c8f;
-            border-radius: 8px;
+            border-radius: 20px;
             width: 100%;
             height: auto;
             cursor: crosshair;
-            margin: 10px 0;
+            touch-action: none;
+            background: #fff;
         }
-
         .option-buttons {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .option-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .option-btn.draw {
-            background: #003c8f;
-            color: white;
-        }
-
-        .option-btn.camera {
-            background: #28a745;
-            color: white;
-        }
-
-        .option-btn.upload {
-            background: #ff9800;
-            color: white;
-        }
-
-        .option-btn.active {
-            transform: scale(1.02);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        #cameraVideo {
-            width: 100%;
-            height: 200px;
-            background: #000;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
             justify-content: center;
         }
-
-        .modal-btn {
-            padding: 8px 20px;
+        .option-btn {
+            flex: 1;
+            padding: 12px 6px;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            background: #f1f5f9;
+            transition: 0.2s;
             cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .option-btn.draw { background: #e6f0ff; color: #003c8f; }
+        .option-btn.camera { background: #e6f9ef; color: #2b6e3c; }
+        .option-btn.upload { background: #fff0e0; color: #c45c00; }
+        .option-btn.active {
+            transform: scale(0.98);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
             font-weight: bold;
         }
-
-        .modal-btn.cancel-btn {
-            background: #dc3545;
-            color: white;
+        #cameraVideo {
+            width: 100%;
+            height: auto;
+            max-height: 220px;
+            background: #111;
+            object-fit: cover;
+            border-radius: 20px;
         }
-
-        .modal-btn.save-btn {
-            background: #28a745;
-            color: white;
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            justify-content: center;
         }
-
-        .modal-btn.clear-btn {
-            background: #6c757d;
-            color: white;
+        .modal-btn {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
         }
-
-        .upload-preview-area {
-            margin-top: 10px;
-            text-align: center;
-        }
-
+        .cancel-btn { background: #e2e8f0; color: #1e293b; }
+        .save-btn { background: #003c8f; color: white; }
+        .clear-btn { background: #94a3b8; color: white; }
         .upload-preview-area img {
             max-width: 100%;
             max-height: 100px;
-            border: 1px solid #003c8f;
-            border-radius: 4px;
+            margin-top: 10px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
         }
-
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-        }
-
         .popup-message {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 20px 30px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 2001;
-            min-width: 280px;
-        }
-
-        .signature-canvas-container {
-            background: white;
-            border: 2px solid #003c8f;
-            border-radius: 8px;
-            margin: 10px 0;
-            position: relative;
-        }
-
-        .signature-canvas, .employer-canvas {
-            width: 100%;
-            height: 100px;
-            background: white;
-            display: block;
-            border-radius: 6px;
-            cursor: crosshair;
-        }
-
-        .photo-box {
-            cursor: pointer;
-        }
-
-        .form1-container {
-            border: 2px solid #003c8f;
-        }
-
-        .signature-label {
-            font-weight: bold;
-            text-align: center;
-            background: #003c8f;
-            color: white;
-            padding: 6px;
-            border-radius: 20px;
-            margin-bottom: 15px;
-        }
-
-        .signature-actions {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .sign-btn, .clear-btn {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .sign-btn {
-            background: #003c8f;
-            color: white;
-        }
-
-        .sign-btn:hover {
-            background: #002a66;
-        }
-
-        .clear-btn {
-            background: #6c757d;
-            color: white;
-        }
-
-        .name-input {
-            margin-top: 10px;
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .primary-btn {
-            background: #003c8f;
-            color: white;
-            border: none;
-            padding: 12px 30px;
+            padding: 16px 28px;
             border-radius: 40px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .primary-btn:hover {
-            background: #002a66;
-            transform: scale(1.02);
-        }
-
-        /* Fix for form-container background */
-        .form-container {
-            background: white !important;
+            z-index: 2100;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-<div class="form-container form1-container">
+<div class="form-container" id="mainForm">
     <div class="header-with-logo">
         <div class="logo-container">
-            <img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='SSS';">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23003c8f'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ESSS%3C/text%3E%3C/svg%3E" alt="SSS Logo">
         </div>
         <div class="sss-header">
             <h1>Social Security System</h1>
@@ -314,33 +487,21 @@
         <h2>COMPANY REPRESENTATIVE AUTHORIZATION CARD</h2>
     </div>
 
-    <fieldset>
+    <fieldset style="border: none; padding: 0;">
         <div class="employer-header">
             <div class="employer-fields">
                 <table class="info-table">
-                    <tr>
-                        <td>EMPLOYER NAME:</td>
-                        <td><input type="text" id="employerName" placeholder="Enter employer name"></td>
-                    </tr>
-                    <tr>
-                        <td>EMPLOYER ID NO.:</td>
-                        <td><input type="text" id="employerId" placeholder="00-0000000-0"></td>
-                    </tr>
-                    <tr>
-                        <td>ADDRESS:</td>
-                        <td><input type="text" id="address" placeholder="Complete address"></td>
-                    </tr>
-                    <tr>
-                        <td>TELEPHONE NO.:</td>
-                        <td><input type="text" id="telephone" placeholder="+63 XXX XXX XXXX"></td>
-                    </tr>
+                    <tr><td>EMPLOYER NAME:</td><td><input type="text" id="employerName" placeholder="Enter employer name"></td></tr>
+                    <tr><td>EMPLOYER ID NO.:</td><td><input type="text" id="employerId" placeholder="00-0000000-0"></td></tr>
+                    <tr><td>ADDRESS:</td><td><input type="text" id="address" placeholder="Complete address"></td></tr>
+                    <tr><td>TELEPHONE NO.:</td><td><input type="text" id="telephone" placeholder="+63 XXX XXX XXXX"></td></tr>
                 </table>
             </div>
             <div class="photo-section">
                 <div class="photo-label">PHOTO 1x1</div>
                 <div class="photo-box" id="photoBox">
-                    <img id="photoPreview" class="photo-preview" src="#">
-                    <div class="photo-placeholder" id="photoPlaceholder"><i>📷</i><span>No image</span></div>
+                    <img id="photoPreview" class="photo-preview" src="#" style="display: none;">
+                    <div class="photo-placeholder" id="photoPlaceholder"><i>📷</i><span>Tap to upload</span></div>
                 </div>
                 <input type="file" id="photoInput" class="photo-input" accept="image/*">
                 <div id="photoError" class="error-message">Please upload a 1x1 photo</div>
@@ -355,29 +516,27 @@
     </div>
 
     <div class="signatures-side-by-side">
-        <!-- SPECIMEN SIGNATURE -->
         <div class="signature-item">
             <div class="signature-label">SPECIMEN SIGNATURE</div>
             <div class="signature-canvas-container">
-                <canvas id="specimenSignature1" class="signature-canvas" width="400" height="100"></canvas>
+                <canvas id="specimenSignature1" class="signature-canvas" width="500" height="110"></canvas>
             </div>
             <div class="signature-actions">
-                <button type="button" class="sign-btn" onclick="openModal('specimenSignature1')">Sign</button>
-                <button type="button" class="clear-btn" onclick="clearCanvas('specimenSignature1')">Clear</button>
+                <button type="button" class="sign-btn" data-canvas="specimenSignature1">Sign</button>
+                <button type="button" class="clear-btn" data-clear="specimenSignature1">Clear</button>
             </div>
             <input type="text" class="name-input" id="specimenName1" placeholder="Type full name">
             <div id="specimenError1" class="error-message">Signature and name are required</div>
         </div>
 
-        <!-- SIGNATURE OVER PRINTED NAME -->
         <div class="signature-item">
             <div class="signature-label">SIGNATURE OVER PRINTED NAME</div>
             <div class="signature-canvas-container">
-                <canvas id="employerSignature" class="employer-canvas" width="400" height="100"></canvas>
+                <canvas id="employerSignature" class="employer-canvas" width="500" height="110"></canvas>
             </div>
             <div class="signature-actions">
-                <button type="button" class="sign-btn" onclick="openModal('employerSignature')">Sign</button>
-                <button type="button" class="clear-btn" onclick="clearCanvas('employerSignature')">Clear</button>
+                <button type="button" class="sign-btn" data-canvas="employerSignature">Sign</button>
+                <button type="button" class="clear-btn" data-clear="employerSignature">Clear</button>
             </div>
             <input type="text" class="name-input" id="employerName2" placeholder="Type full name of Employer/Owner">
             <div id="employerError" class="error-message">Signature and name are required</div>
@@ -385,64 +544,320 @@
     </div>
 
     <div class="noted-section">
-        <div class="noted-label" style="font-weight: 600; color: #003c8f;">Noted by:</div>
-        <br></br>
+        <div style="font-weight: 600; color: #003c8f;">Noted by:</div>
         <div class="noted-line"></div>
         <div class="noted-name">ELEANOR F. DEATO</div>
         <div class="noted-title">Branch Head</div>
     </div>
 
     <div class="action-buttons">
-        <button class="primary-btn" type="button" onclick="goToSecondForm()">NEXT: SPECIMEN SIGNATURE CARD</button>
+        <button class="primary-btn" type="button" id="nextBtn">NEXT: SPECIMEN SIGNATURE CARD</button>
     </div>
 </div>
 
-<!-- SIGNATURE MODAL - with Draw, Camera, and Upload options -->
+<!-- MODAL for signature -->
 <div id="signatureModal" class="modal">
     <div class="modal-content">
-        <h3>Add Your Signature</h3>
+        <h3 style="margin-bottom: 12px;">Add Signature</h3>
         <div class="option-buttons">
-            <button class="option-btn draw" id="drawOptionBtn" onclick="selectDraw()">✏️ Draw</button>
-            <button class="option-btn camera" id="cameraOptionBtn" onclick="selectCamera()">📸 Take Photo</button>
-            <button class="option-btn upload" id="uploadOptionBtn" onclick="selectUpload()">📁 Upload</button>
+            <button class="option-btn draw" id="drawOptionBtn">✏️ Draw</button>
+            <button class="option-btn camera" id="cameraOptionBtn">📸 Camera</button>
+            <button class="option-btn upload" id="uploadOptionBtn">📁 Upload</button>
         </div>
-        
-        <!-- Draw Mode -->
         <div id="drawMode" style="display: none;">
-            <canvas id="modalCanvas" class="modal-canvas" width="400" height="200"></canvas>
+            <canvas id="modalCanvas" class="modal-canvas" width="450" height="180" style="width:100%; height:auto; background:#fff;"></canvas>
             <div class="modal-buttons">
-                <button class="modal-btn clear-btn" onclick="clearModalCanvas()">Clear</button>
-                <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn save-btn" onclick="saveDrawSignature()">Save</button>
+                <button class="modal-btn clear-btn" id="clearModalCanvasBtn">Clear</button>
+                <button class="modal-btn cancel-btn" id="cancelModalBtn">Cancel</button>
+                <button class="modal-btn save-btn" id="saveDrawBtn">Save</button>
             </div>
         </div>
-        
-        <!-- Camera Mode -->
         <div id="cameraMode" style="display: none;">
-            <div style="background: #000; border-radius: 8px; overflow: hidden;">
-                <video id="cameraVideo" autoplay playsinline></video>
-                <canvas id="cameraCanvas" style="display: none;"></canvas>
-            </div>
+            <video id="cameraVideo" autoplay playsinline muted></video>
+            <canvas id="cameraCanvas" style="display: none;"></canvas>
             <div class="modal-buttons">
-                <button class="modal-btn" onclick="capturePhoto()" style="background:#28a745; color:white;">📸 Capture</button>
-                <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn save-btn" id="savePhotoBtn" style="display:none;" onclick="savePhotoSignature()">Save</button>
+                <button class="modal-btn" id="capturePhotoBtn" style="background:#28a745;color:white;">📸 Capture</button>
+                <button class="modal-btn cancel-btn" id="cancelCameraBtn">Cancel</button>
+                <button class="modal-btn save-btn" id="savePhotoBtn" style="display:none;">Save</button>
             </div>
             <div id="photoPreviewCapture" class="upload-preview-area"></div>
         </div>
-        
-        <!-- Upload Mode -->
         <div id="uploadMode" style="display: none;">
-            <input type="file" id="uploadFileInput" accept="image/*" style="margin: 10px 0; padding: 8px;">
+            <input type="file" id="uploadFileInput" accept="image/*" style="margin: 12px 0; padding: 8px;">
             <div id="uploadPreview" class="upload-preview-area"></div>
             <div class="modal-buttons">
-                <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn save-btn" onclick="saveUploadSignature()">Save</button>
+                <button class="modal-btn cancel-btn" id="cancelUploadBtn">Cancel</button>
+                <button class="modal-btn save-btn" id="saveUploadBtn">Save</button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="index.js"></script>
+<script>
+    // ---------- Signature logic with touch support ----------
+    let activeCanvasId = null;
+    let drawCtx = null;
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+
+    function initCanvasEvents(canvasElem) {
+        if (!canvasElem) return;
+        canvasElem.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = canvasElem.getBoundingClientRect();
+            const touch = e.touches[0];
+            const x = (touch.clientX - rect.left) * (canvasElem.width / rect.width);
+            const y = (touch.clientY - rect.top) * (canvasElem.height / rect.height);
+            drawing = true;
+            lastX = x; lastY = y;
+            drawCtx.beginPath();
+            drawCtx.moveTo(x, y);
+        });
+        canvasElem.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!drawing) return;
+            const rect = canvasElem.getBoundingClientRect();
+            const touch = e.touches[0];
+            const x = (touch.clientX - rect.left) * (canvasElem.width / rect.width);
+            const y = (touch.clientY - rect.top) * (canvasElem.height / rect.height);
+            drawCtx.lineTo(x, y);
+            drawCtx.stroke();
+            lastX = x; lastY = y;
+        });
+        canvasElem.addEventListener('touchend', () => { drawing = false; });
+        canvasElem.addEventListener('mousedown', (e) => {
+            drawing = true;
+            const rect = canvasElem.getBoundingClientRect();
+            const x = (e.clientX - rect.left) * (canvasElem.width / rect.width);
+            const y = (e.clientY - rect.top) * (canvasElem.height / rect.height);
+            drawCtx.beginPath();
+            drawCtx.moveTo(x, y);
+            lastX = x; lastY = y;
+        });
+        canvasElem.addEventListener('mousemove', (e) => {
+            if (!drawing) return;
+            const rect = canvasElem.getBoundingClientRect();
+            const x = (e.clientX - rect.left) * (canvasElem.width / rect.width);
+            const y = (e.clientY - rect.top) * (canvasElem.height / rect.height);
+            drawCtx.lineTo(x, y);
+            drawCtx.stroke();
+        });
+        canvasElem.addEventListener('mouseup', () => { drawing = false; });
+    }
+
+    function setupCanvas(targetId) {
+        const canvas = document.getElementById(targetId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.strokeStyle = '#003c8f';
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        return { canvas, ctx };
+    }
+
+    // clear target canvas
+    function clearCanvasById(id) {
+        const canvas = document.getElementById(id);
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#003c8f';
+            ctx.lineWidth = 2.5;
+        }
+    }
+
+    // set signature image from dataURL
+    function setSignatureFromDataURL(canvasId, dataURL) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const img = new Image();
+        img.onload = () => {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+            const x = (canvas.width - img.width * scale) / 2;
+            const y = (canvas.height - img.height * scale) / 2;
+            ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+        };
+        img.src = dataURL;
+    }
+
+    // modal controls
+    const modal = document.getElementById('signatureModal');
+    let currentModalCanvas = null;
+    let tempSignatureData = null;
+    let stream = null;
+
+    function closeModal() { stopCamera(); modal.style.display = 'none'; activeCanvasId = null; }
+    function stopCamera() { if (stream) { stream.getTracks().forEach(track => track.stop()); stream = null; } }
+
+    function selectDraw() {
+        stopCamera();
+        document.getElementById('drawMode').style.display = 'block';
+        document.getElementById('cameraMode').style.display = 'none';
+        document.getElementById('uploadMode').style.display = 'none';
+        if (!currentModalCanvas) currentModalCanvas = document.getElementById('modalCanvas');
+        const ctx = currentModalCanvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, currentModalCanvas.width, currentModalCanvas.height);
+        ctx.strokeStyle = '#003c8f';
+        ctx.lineWidth = 2.5;
+        drawCtx = ctx;
+        initCanvasEvents(currentModalCanvas);
+    }
+    async function selectCamera() {
+        document.getElementById('drawMode').style.display = 'none';
+        document.getElementById('uploadMode').style.display = 'none';
+        document.getElementById('cameraMode').style.display = 'block';
+        document.getElementById('savePhotoBtn').style.display = 'none';
+        document.getElementById('photoPreviewCapture').innerHTML = '';
+        try {
+            if (stream) stopCamera();
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            const video = document.getElementById('cameraVideo');
+            video.srcObject = stream;
+            await video.play();
+        } catch(e) { alert('Camera access failed'); }
+    }
+    function selectUpload() {
+        stopCamera();
+        document.getElementById('drawMode').style.display = 'none';
+        document.getElementById('cameraMode').style.display = 'none';
+        document.getElementById('uploadMode').style.display = 'block';
+        document.getElementById('uploadPreview').innerHTML = '';
+    }
+    function capturePhoto() {
+        const video = document.getElementById('cameraVideo');
+        const canvas = document.getElementById('cameraCanvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataURL = canvas.toDataURL('image/png');
+        const previewDiv = document.getElementById('photoPreviewCapture');
+        previewDiv.innerHTML = `<img src="${dataURL}" style="max-width:100%; border-radius:12px;">`;
+        tempSignatureData = dataURL;
+        document.getElementById('savePhotoBtn').style.display = 'block';
+    }
+    function savePhotoSignature() { if (tempSignatureData) { applySignatureToActive(tempSignatureData); closeModal(); } else alert('No captured photo'); }
+    function saveDrawSignature() {
+        if (currentModalCanvas) {
+            const dataURL = currentModalCanvas.toDataURL();
+            applySignatureToActive(dataURL);
+            closeModal();
+        }
+    }
+    function saveUploadSignature() {
+        const fileInput = document.getElementById('uploadFileInput');
+        if (fileInput.files.length === 0) { alert('Select an image'); return; }
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => { applySignatureToActive(e.target.result); closeModal(); };
+        reader.readAsDataURL(file);
+    }
+    function applySignatureToActive(dataURL) { if (activeCanvasId) setSignatureFromDataURL(activeCanvasId, dataURL); }
+
+    // open modal with canvas id
+    window.openModal = function(canvasId) {
+        activeCanvasId = canvasId;
+        modal.style.display = 'flex';
+        selectDraw(); // default draw
+        if (currentModalCanvas) {
+            const ctx = currentModalCanvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, currentModalCanvas.width, currentModalCanvas.height);
+        }
+    };
+
+    // event bindings
+    document.querySelectorAll('.sign-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const canvasId = btn.getAttribute('data-canvas');
+            if (canvasId) openModal(canvasId);
+        });
+    });
+    document.querySelectorAll('.clear-btn[data-clear]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = btn.getAttribute('data-clear');
+            clearCanvasById(id);
+        });
+    });
+    document.getElementById('drawOptionBtn').onclick = selectDraw;
+    document.getElementById('cameraOptionBtn').onclick = selectCamera;
+    document.getElementById('uploadOptionBtn').onclick = selectUpload;
+    document.getElementById('saveDrawBtn').onclick = saveDrawSignature;
+    document.getElementById('savePhotoBtn').onclick = savePhotoSignature;
+    document.getElementById('saveUploadBtn').onclick = saveUploadSignature;
+    document.getElementById('clearModalCanvasBtn').onclick = () => { if(currentModalCanvas){ const ctx=currentModalCanvas.getContext('2d'); ctx.fillStyle='white'; ctx.fillRect(0,0,currentModalCanvas.width,currentModalCanvas.height); } };
+    document.getElementById('cancelModalBtn').onclick = closeModal;
+    document.getElementById('cancelCameraBtn').onclick = closeModal;
+    document.getElementById('cancelUploadBtn').onclick = closeModal;
+
+    // photo upload logic
+    const photoBox = document.getElementById('photoBox');
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const photoPlaceholder = document.getElementById('photoPlaceholder');
+    photoBox.addEventListener('click', () => photoInput.click());
+    photoInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                photoPreview.src = ev.target.result;
+                photoPreview.style.display = 'block';
+                photoPlaceholder.style.display = 'none';
+                document.getElementById('photoError').style.display = 'none';
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    // validation & next
+    function validateForm() {
+        let valid = true;
+        if (!photoPreview.src || photoPreview.style.display !== 'block') { document.getElementById('photoError').style.display = 'block'; valid = false; }
+        else document.getElementById('photoError').style.display = 'none';
+
+        const sigCanvas1 = document.getElementById('specimenSignature1');
+        const isEmpty1 = (ctx) => { const imgData = ctx.getImageData(0,0,sigCanvas1.width,sigCanvas1.height).data; for(let i=0;i<imgData.length;i+=4) if(imgData[i+3]!==0 && (imgData[i]<250||imgData[i+1]<250||imgData[i+2]<250)) return false; return true; };
+        const ctx1 = sigCanvas1.getContext('2d');
+        const empty1 = isEmpty1(ctx1);
+        const name1 = document.getElementById('specimenName1').value.trim();
+        if(empty1 || !name1){ document.getElementById('specimenError1').style.display='block'; valid=false; } else document.getElementById('specimenError1').style.display='none';
+
+        const sigCanvas2 = document.getElementById('employerSignature');
+        const ctx2 = sigCanvas2.getContext('2d');
+        const empty2 = isEmpty1.bind({getImageData: (x,y,w,h)=>ctx2.getImageData(x,y,w,h)})();
+        const name2 = document.getElementById('employerName2').value.trim();
+        if(empty2 || !name2){ document.getElementById('employerError').style.display='block'; valid=false; } else document.getElementById('employerError').style.display='none';
+        return valid;
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        if(validateForm()) alert('✅ Form is ready! (Next: Specimen Signature Card)');
+        else alert('⚠️ Please complete all required fields: photo, signatures and full names.');
+    });
+
+    // initialize all canvases
+    [['specimenSignature1'], ['employerSignature']].forEach(([id]) => {
+        const { canvas, ctx } = setupCanvas(id);
+        if(ctx) { ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+    });
+    // initial modal canvas
+    currentModalCanvas = document.getElementById('modalCanvas');
+    if(currentModalCanvas){
+        const ctx = currentModalCanvas.getContext('2d');
+        ctx.fillStyle='white'; ctx.fillRect(0,0,currentModalCanvas.width,currentModalCanvas.height);
+        ctx.strokeStyle='#003c8f'; ctx.lineWidth=2.5;
+        drawCtx = ctx;
+        initCanvasEvents(currentModalCanvas);
+    }
+</script>
 </body>
 </html>
