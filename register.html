@@ -808,6 +808,47 @@
                 font-size: 10px !important;
             }
         }
+        
+        /* Granting section styling - signature on top, name below */
+        .granting-section {
+            margin: 20px 0;
+        }
+        
+        .granting-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #003c8f;
+        }
+        
+        .granting-container {
+            border: 1px solid #003c8f;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .granting-signature {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Signature on top, name input below */
+        .signature-wrapper {
+            order: 1;
+        }
+        
+        .name-wrapper {
+            order: 2;
+        }
+        
+        .granting-label {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -835,15 +876,15 @@
                 <td>Registered Employer Name</td>
                 <td><input type="text" id="registeredName" readonly></td>
             </tr>
-            <tr>
+             <tr>
                 <td>I.D. No.</td>
                 <td><input type="text" id="idNumber" readonly></td>
             </tr>
-            <tr>
+             <tr>
                 <td>Address</td>
                 <td><input type="text" id="companyAddress" readonly></td>
             </tr>
-            <tr>
+             <tr>
                 <td>Tel. No.</td>
                 <td><input type="text" id="telNumber" readonly></td>
             </tr>
@@ -855,7 +896,7 @@
 
         <table class="officials-table">
             <thead>
-                <tr>
+                 <tr>
                     <th>Printed Name</th>
                     <th>Designation</th>
                     <th>Initial</th>
@@ -909,14 +950,20 @@
             <div class="granting-title">Name and official capacity of person granting authority</div>
             <div class="granting-container">
                 <div class="granting-signature">
-                    <input type="text" id="grantingName" placeholder="Full name and position" style="width: 100%; padding: 8px; margin-bottom: 10px;" required>
-                    <canvas class="granting-canvas" id="grantingSignature" width="400" height="80"></canvas>
-                    <div class="signature-actions-small" style="justify-content: center;">
-                        <button type="button" class="sign-btn-small" onclick="openModal('grantingSignature')">Sign</button>
-                        <button type="button" class="clear-btn-small" onclick="clearCanvas('grantingSignature')">Clear</button>
+                    <!-- SIGNATURE ON TOP -->
+                    <div class="signature-wrapper">
+                        <canvas class="granting-canvas" id="grantingSignature" width="400" height="80"></canvas>
+                        <div class="signature-actions-small" style="justify-content: center;">
+                            <button type="button" class="sign-btn-small" onclick="openModal('grantingSignature')">Sign</button>
+                            <button type="button" class="clear-btn-small" onclick="clearCanvas('grantingSignature')">Clear</button>
+                        </div>
+                        <div class="granting-label">(Please sign above)</div>
+                        <div id="grantingError" class="error-message">Signature required</div>
                     </div>
-                    <div class="granting-label">(Please sign over printed name.)</div>
-                    <div id="grantingError" class="error-message">Signature required</div>
+                    <!-- NAME INPUT BELOW -->
+                    <div class="name-wrapper">
+                        <input type="text" id="grantingName" placeholder="Full name and position" style="width: 100%; padding: 8px; margin-top: 10px;" required>
+                    </div>
                 </div>
             </div>
         </div>
