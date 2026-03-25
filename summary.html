@@ -276,6 +276,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            display: table;
         }
 
         .officials-table th {
@@ -284,18 +285,22 @@
             padding: 12px;
             text-transform: uppercase;
             border: 1px solid #003c8f;
+            text-align: center;
         }
 
         .officials-table td {
             border: 1px solid #003c8f;
             padding: 12px;
             text-align: left;
-            vertical-align: top;
+            vertical-align: middle;
             word-break: break-word;
-            white-space: normal;
         }
 
-        .officials-table td:last-child {
+        .officials-table td:first-child {
+            text-align: left;
+        }
+
+        .officials-table td:nth-child(4) {
             text-align: center;
         }
 
@@ -762,105 +767,40 @@
         margin: 10px 0 6px !important;
     }
 }
+/* 📱 FIX: SIGNATURE AREA (REMOVE SCROLL) */
 @media screen and (max-width: 768px) {
 
-    body {
-        padding: 10px;
-    }
-
-    .company-info-section {
-        overflow-x: auto;
-    }
-
-    .info-table {
-        min-width: 500px;
-    }
-
-    .officials-table {
-        display: block;
-        overflow-x: auto;
-        white-space: normal;
-    }
-    
-    .officials-table th,
-    .officials-table td {
-        white-space: normal;
-        word-break: break-word;
-        min-width: 100px;
-    }
-
-    .signature-grid {
-        display: flex;
-        gap: 15px;
-        overflow-x: auto;
-    }
-
-    .signature-box {
-        min-width: 220px;
-        flex-shrink: 0;
-    }
-
-    .header-with-logo,
-    .republic-header {
-        flex-wrap: wrap;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .sss-header,
-    .republic-text {
-        text-align: center;
-    }
-
-    .photo-container {
-        margin-top: 10px;
-    }
-
-    .certification-text {
-        font-size: 0.9rem;
-    }
-
-    .print-btn {
+    .signature-section,
+    .signature-container,
+    .signature-wrapper {
+        overflow-x: hidden !important;
         width: 100%;
     }
 
-    /* 📱 FIX: SPECIMEN CARD TABLE (OFFICIALS) */
-.officials-table {
-    display: block;
-    overflow-x: auto;
-    white-space: normal;
-}
+    .signature-table {
+        width: 100% !important;
+        min-width: unset !important;
+        table-layout: fixed;
+    }
 
-.officials-table table {
-    min-width: 600px;
-}
+    .signature-table td {
+        width: 50%;
+        text-align: center;
+        word-break: break-word;
+    }
 
-.officials-table th,
-.officials-table td {
-    white-space: normal;
-    word-break: break-word;
-}
+    /* signature line */
+    .signature-line {
+        width: 100%;
+        border-bottom: 1px solid #000;
+        margin: 10px 0;
+    }
 
-/* specific widths para hindi gumalaw */
-.officials-table th:nth-child(1),
-.officials-table td:nth-child(1) {
-    min-width: 180px;
-}
-
-.officials-table th:nth-child(2),
-.officials-table td:nth-child(2) {
-    min-width: 150px;
-}
-
-.officials-table th:nth-child(3),
-.officials-table td:nth-child(3) {
-    min-width: 80px;
-}
-
-.officials-table th:nth-child(4),
-.officials-table td:nth-child(4) {
-    min-width: 120px;
-}
+    /* name under signature */
+    .signature-name {
+        font-size: 13px;
+        white-space: normal;
+    }
 }
 </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -892,195 +832,224 @@
         };
 
         async function displaySummary() {
-            const container = document.getElementById('summaryContainer');
+    const container = document.getElementById('summaryContainer');
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const submissionId = urlParams.get('id');
+    
+    if (!submissionId) {
+        container.innerHTML = '<div class="error-message">❌ No submission ID found</div>';
+        return;
+    }
+
+    try {
+        const docRef = db.collection('sss-submissions').doc(submissionId);
+        const docSnap = await docRef.get();
+
+        if (!docSnap.exists) {
+            container.innerHTML = '<div class="error-message">❌ Submission not found</div>';
+            return;
+        }
+
+        const data = docSnap.data();
+        
+        console.log("🔥 DATA FROM FIREBASE:", data);
+        
+        let html = '';
+        
+        html += '<div class="verified-badge"><span>✓ VERIFIED CLOUD DATA</span></div>';
+        
+        // FORM 1 - COMPANY REPRESENTATIVE AUTHORIZATION CARD
+        html += '<div class="form-card">';
+        html += '<div class="card-body">';
+        
+        // Header with logo - same as index
+        html += '<div class="header-with-logo">';
+        html += '<div class="logo-container">';
+        html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display=\'none\';">';
+        html += '</div>';
+        html += '<div class="sss-header">';
+        html += '<h1>Social Security System</h1>';
+        html += '<div class="branch">EASTWOOD BRANCH</div>';
+        html += '<div class="address">187 ABQ Building, E. Rodriguez Jr. Ave., Bagumbayan, QC</div>';
+        html += '<div class="tel">Tel. Nos.: 8351-1605; 8351-1623</div>';
+        html += '</div>';
+        html += '</div>';
+        
+        // Form title below header
+        html += '<div class="form-title">';
+        html += '<h2>COMPANY REPRESENTATIVE AUTHORIZATION CARD</h2>';
+        html += '</div>';
+        
+        // Company info with photo
+        html += '<div class="company-info-section">';
+        html += '<table class="info-table">';
+        html += '<tr><td>EMPLOYER NAME:</td><td>' + (data.employerName || 'N/A') + '</td></tr>';
+        html += '<tr><td>EMPLOYER ID NO.:</td><td>' + (data.employerId || 'N/A') + '</td></tr>';
+        html += '<tr><td>ADDRESS:</td><td>' + (data.address || 'N/A') + '</td></tr>';
+        html += '<tr><td>TELEPHONE NO.:</td><td>' + (data.telephone || 'N/A') + '</td></tr>';
+        html += '</table>';
+        
+        html += '<div class="photo-container">';
+        html += '<div class="photo-label">PHOTO 1x1</div>';
+        html += '<div class="photo-frame">';
+        if (data.photo && data.photo !== '#' && data.photo !== '') {
+            html += '<img src="' + data.photo + '" alt="1x1 Photo">';
+        } else {
+            html += '<div class="photo-placeholder">No image</div>';
+        }
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        
+        // Certification text
+        html += '<div class="certification-text">';
+        html += '<p>This is to certify that Mr./Ms. <strong>' + (data.certName || 'N/A') + '</strong> with SS # <strong>' + (data.ssNumber || 'N/A') + '</strong>, whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company\'s employees.</p>';
+        html += '<p>This Certification shall be valid within one (1) year from the date of issuance unless otherwise revoked and the SSS Eastwood Branch duly notified.</p>';
+        html += '</div>';
+        
+        // Signatures
+        html += '<div class="signature-grid">';
+        if (data.specimenSignature1) {
+            html += '<div class="signature-box">';
+            html += '<h4>SPECIMEN SIGNATURE</h4>';
+            html += '<img src="' + data.specimenSignature1 + '" class="signature-img">';
+            html += '<div class="signature-name">' + (data.specimenName1 || '') + '</div>';
+            html += '</div>';
+        }
+        if (data.employerSignature) {
+            html += '<div class="signature-box">';
+            html += '<h4>SIGNATURE OVER PRINTED NAME</h4>';
+            html += '<img src="' + data.employerSignature + '" class="signature-img">';
+            html += '<div class="signature-name">' + (data.employerName2 || data.employerName || '') + '</div>';
+            html += '</div>';
+        }
+        html += '</div>';
+        
+        // Noted by
+        html += '<div class="noted-section">';
+        html += '<div class="noted-label">Noted by:</div>';
+        html += '<div class="noted-line"></div>';
+        html += '<div class="noted-name">ELEANOR F. DEATO</div>';
+        html += '<div class="noted-title">Branch Head</div>';
+        html += '</div>';
+        
+        html += '</div></div>';
+        
+        // FORM 2 - SPECIMEN SIGNATURE CARD
+        html += '<div class="form-card">';
+        html += '<div class="card-body">';
+        
+        // Republic header
+        html += '<div class="republic-header">';
+        html += '<div class="logo-container">';
+        html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display=\'none\';">';
+        html += '</div>';
+        html += '<div class="republic-text">';
+        html += '<h2>Republic of the Philippines</h2>';
+        html += '<h3>SOCIAL SECURITY SYSTEM</h3>';
+        html += '<div class="form-number">SSS Form L - 501 (07-94)</div>';
+        html += '</div>';
+        html += '</div>';
+        
+        // Form title below header
+        html += '<div class="form-title">';
+        html += '<h2>SPECIMEN SIGNATURE CARD</h2>';
+        html += '</div>';
+        
+        // Employer info - FIXED: maayos na display
+        html += '<table class="info-table">';
+        html += '<tr>';
+        html += '<td style="width: 180px; background: #f8f9ff; font-weight: 600; color: #003c8f;">Registered Employer Name:</td>';
+        html += '<td>' + (data.registeredName || data.employerName || 'N/A') + '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td style="width: 180px; background: #f8f9ff; font-weight: 600; color: #003c8f;">I.D. No.:</td>';
+        html += '<td>' + (data.idNumber || data.employerId || 'N/A') + '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td style="width: 180px; background: #f8f9ff; font-weight: 600; color: #003c8f;">Address:</td>';
+        html += '<td>' + (data.companyAddress || data.address || 'N/A') + '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td style="width: 180px; background: #f8f9ff; font-weight: 600; color: #003c8f;">Tel. No.:</td>';
+        html += '<td>' + (data.telNumber || data.telephone || 'N/A') + '</td>';
+        html += '</tr>';
+        html += '</table>';
+        
+        // Officials table
+        html += '<h3 style="color:#003c8f; margin:20px 0 12px; text-align:center;">Authorized Officials</h3>';
+        html += '<div style="overflow-x: auto; width: 100%;">';
+        html += '<table class="officials-table" style="width: 100%; border-collapse: collapse;">';
+        html += '<thead>';
+        html += '<tr style="background:#003c8f; color:white;">';
+        html += '<th style="padding: 12px; border: 1px solid #003c8f; text-align: center;">Printed Name</th>';
+        html += '<th style="padding: 12px; border: 1px solid #003c8f; text-align: center;">Designation</th>';
+        html += '<th style="padding: 12px; border: 1px solid #003c8f; text-align: center;">Initial</th>';
+        html += '<th style="padding: 12px; border: 1px solid #003c8f; text-align: center;">Signature</th>';
+        html += '</tr>';
+        html += '</thead>';
+        html += '<tbody>';
+        
+        for (let i = 1; i <= 3; i++) {
+            const officialName = data['officialName' + i];
+            const officialDesignation = data['officialDesignation' + i];
+            const officialInitial = data['officialInitial' + i];
+            const officialSignature = data['officialSignature' + i];
             
-            const urlParams = new URLSearchParams(window.location.search);
-            const submissionId = urlParams.get('id');
-            
-            if (!submissionId) {
-                container.innerHTML = '<div class="error-message">❌ No submission ID found</div>';
-                return;
-            }
-
-            try {
-                const docRef = db.collection('sss-submissions').doc(submissionId);
-                const docSnap = await docRef.get();
-
-                if (!docSnap.exists) {
-                    container.innerHTML = '<div class="error-message">❌ Submission not found</div>';
-                    return;
-                }
-
-                const data = docSnap.data();
-                
-                console.log("🔥 DATA FROM FIREBASE:", data);
-                
-                let html = '';
-                
-                html += '<div class="verified-badge"><span>✓ VERIFIED CLOUD DATA</span></div>';
-                
-                // FORM 1 - COMPANY REPRESENTATIVE AUTHORIZATION CARD
-                html += '<div class="form-card">';
-                html += '<div class="card-body">';
-                
-                // Header with logo - same as index
-                html += '<div class="header-with-logo">';
-                html += '<div class="logo-container">';
-                html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display=\'none\';">';
-                html += '</div>';
-                html += '<div class="sss-header">';
-                html += '<h1>Social Security System</h1>';
-                html += '<div class="branch">EASTWOOD BRANCH</div>';
-                html += '<div class="address">187 ABQ Building, E. Rodriguez Jr. Ave., Bagumbayan, QC</div>';
-                html += '<div class="tel">Tel. Nos.: 8351-1605; 8351-1623</div>';
-                html += '</div>';
-                html += '</div>';
-                
-                // Form title below header
-                html += '<div class="form-title">';
-                html += '<h2>COMPANY REPRESENTATIVE AUTHORIZATION CARD</h2>';
-                html += '</div>';
-                
-                // Company info with photo
-                html += '<div class="company-info-section">';
-                html += '<table class="info-table">';
-                html += '<td>EMPLOYER NAME:</td><td>' + (data.employerName || 'N/A') + '</td></tr>';
-                html += '<td>EMPLOYER ID NO.:</td><td>' + (data.employerId || 'N/A') + '</td></tr>';
-                html += '<td>ADDRESS:</td><td>' + (data.address || 'N/A') + '</td></tr>';
-                html += '<td>TELEPHONE NO.:</td><td>' + (data.telephone || 'N/A') + '</td></tr>';
-                html += '</table>';
-                
-                html += '<div class="photo-container">';
-                html += '<div class="photo-label">PHOTO 1x1</div>';
-                html += '<div class="photo-frame">';
-                if (data.photo && data.photo !== '#' && data.photo !== '') {
-                    html += '<img src="' + data.photo + '" alt="1x1 Photo">';
+            if (officialName || officialSignature) {
+                html += '<tr>';
+                html += '<td style="padding: 12px; border: 1px solid #003c8f; word-break: break-word;">' + (officialName || '') + '</td>';
+                html += '<td style="padding: 12px; border: 1px solid #003c8f; word-break: break-word;">' + (officialDesignation || '') + '</td>';
+                html += '<td style="padding: 12px; border: 1px solid #003c8f; word-break: break-word;">' + (officialInitial || '') + '</td>';
+                html += '<td style="padding: 12px; border: 1px solid #003c8f; text-align: center;">';
+                if (officialSignature) {
+                    html += '<img src="' + officialSignature + '" class="official-signature-img" style="max-width:100px; max-height:45px;">';
                 } else {
-                    html += '<div class="photo-placeholder">No image</div>';
+                    html += 'No signature';
                 }
-                html += '</div>';
-                html += '</div>';
-                html += '</div>';
-                
-                // Certification text
-                html += '<div class="certification-text">';
-                html += '<p>This is to certify that Mr./Ms. <strong>' + (data.certName || 'N/A') + '</strong> with SS # <strong>' + (data.ssNumber || 'N/A') + '</strong>, whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company\'s employees.</p>';
-                html += '<p>This Certification shall be valid within one (1) year from the date of issuance unless otherwise revoked and the SSS Eastwood Branch duly notified.</p>';
-                html += '</div>';
-                
-                // Signatures
-                html += '<div class="signature-grid">';
-                if (data.specimenSignature1) {
-                    html += '<div class="signature-box">';
-                    html += '<h4>SPECIMEN SIGNATURE</h4>';
-                    html += '<img src="' + data.specimenSignature1 + '" class="signature-img">';
-                    html += '<div class="signature-name">' + (data.specimenName1 || '') + '</div>';
-                    html += '</div>';
-                }
-                if (data.employerSignature) {
-                    html += '<div class="signature-box">';
-                    html += '<h4>SIGNATURE OVER PRINTED NAME</h4>';
-                    html += '<img src="' + data.employerSignature + '" class="signature-img">';
-                    html += '<div class="signature-name">' + (data.employerName2 || data.employerName || '') + '</div>';
-                    html += '</div>';
-                }
-                html += '</div>';
-                
-                // Noted by
-                html += '<div class="noted-section">';
-                html += '<div class="noted-label">Noted by:</div>';
-                html += '<div class="noted-line"></div>';
-                html += '<div class="noted-name">ELEANOR F. DEATO</div>';
-                html += '<div class="noted-title">Branch Head</div>';
-                html += '</div>';
-                
-                html += '</div></div>';
-                
-                // FORM 2 - SPECIMEN SIGNATURE CARD
-                html += '<div class="form-card">';
-                html += '<div class="card-body">';
-                
-                // Republic header
-                html += '<div class="republic-header">';
-                html += '<div class="logo-container">';
-                html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display=\'none\';">';
-                html += '</div>';
-                html += '<div class="republic-text">';
-                html += '<h2>Republic of the Philippines</h2>';
-                html += '<h3>SOCIAL SECURITY SYSTEM</h3>';
-                html += '<div class="form-number">SSS Form L - 501 (07-94)</div>';
-                html += '</div>';
-                html += '</div>';
-                
-                // Form title below header
-                html += '<div class="form-title">';
-                html += '<h2>SPECIMEN SIGNATURE CARD</h2>';
-                html += '</div>';
-                
-                // Employer info
-                html += '<table class="info-table">';
-                html += '<td>Registered Employer Name:</td><td>' + (data.registeredName || data.employerName || 'N/A') + '</td></tr>';
-                html += '<td>I.D. No.:</td><td>' + (data.idNumber || data.employerId || 'N/A') + '</td></tr>';
-                html += '<td>Address:</td><td>' + (data.companyAddress || data.address || 'N/A') + '</td></tr>';
-                html += '<td>Tel. No.:</td><td>' + (data.telNumber || data.telephone || 'N/A') + '</td></tr>';
-                html += '</table>';
-                
-                // Officials table - FIXED: added word-break to prevent cut off
-                html += '<h3 style="color:#003c8f; margin:12px 0 8px; text-align:center;">Authorized Officials</h3>';
-                html += '<table class="officials-table">';
-                html += '<tr><th>Printed Name</th><th>Designation</th><th>Initial</th><th>Signature</th></tr>';
-                
-                for (let i = 1; i <= 3; i++) {
-                    if (data['officialName' + i] || data['officialSignature' + i]) {
-                        html += '<tr>';
-                        html += '<td style="word-break:break-word;">' + (data['officialName' + i] || '') + '</td>';
-                        html += '<td style="word-break:break-word;">' + (data['officialDesignation' + i] || '') + '</td>';
-                        html += '<td style="word-break:break-word;">' + (data['officialInitial' + i] || '') + '</td>';
-                        html += '<td style="text-align:center;">';
-                        if (data['officialSignature' + i]) {
-                            html += '<img src="' + data['officialSignature' + i] + '" class="official-signature-img">';
-                        } else {
-                            html += 'No signature';
-                        }
-                        html += '</td>';
-                        html += '</tr>';
-                    }
-                }
-                html += '</table>';
-                
-                // Granting section
-                if (data.grantingName || data.grantingSignature) {
-                    html += '<div class="granting-section">';
-                    html += '<div class="granting-title">Name and official capacity of person granting authority</div>';
-                    html += '<div class="granting-container">';
-                    if (data.grantingSignature) {
-                        html += '<img src="' + data.grantingSignature + '" class="granting-signature-img" alt="Granting Signature">';
-                    }
-                    html += '<div class="granting-name">' + (data.grantingName || 'N/A') + '</div>';
-                    html += '<div class="granting-label">(Please sign over printed name.)</div>';
-                    if (data.grantingDate) {
-                        html += '<div class="granting-date">Date authority granted: ' + data.grantingDate + '</div>';
-                    }
-                    html += '</div>';
-                    html += '</div>';
-                }
-                
-                html += '</div></div>';
-                
-                // Timestamp
-                if (data.timestamp) {
-                    html += '<div class="timestamp">Generated: ' + new Date(data.timestamp).toLocaleString() + '</div>';
-                }
-                
-                html += '<button class="print-btn" onclick="window.print()">PRINT FORM</button>';
-                
-                container.innerHTML = html;
-                
-            } catch (error) {
-                console.error('Error:', error);
-                container.innerHTML = '<div class="error-message">❌ Error: ' + error.message + '</div>';
+                html += '</td>';
+                html += '</tr>';
             }
         }
+        
+        html += '</tbody>';
+        html += '</table>';
+        html += '</div>';
+        
+        // Granting section
+        if (data.grantingName || data.grantingSignature) {
+            html += '<div class="granting-section">';
+            html += '<div class="granting-title">Name and official capacity of person granting authority</div>';
+            html += '<div class="granting-container">';
+            if (data.grantingSignature) {
+                html += '<img src="' + data.grantingSignature + '" class="granting-signature-img" alt="Granting Signature">';
+            }
+            html += '<div class="granting-name">' + (data.grantingName || 'N/A') + '</div>';
+            html += '<div class="granting-label">(Please sign over printed name.)</div>';
+            if (data.grantingDate) {
+                html += '<div class="granting-date">Date authority granted: ' + data.grantingDate + '</div>';
+            }
+            html += '</div>';
+            html += '</div>';
+        }
+        
+        html += '</div></div>';
+        
+        // Timestamp
+        if (data.timestamp) {
+            html += '<div class="timestamp">Generated: ' + new Date(data.timestamp).toLocaleString() + '</div>';
+        }
+        
+        html += '<button class="print-btn" onclick="window.print()">PRINT FORM</button>';
+        
+        container.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error:', error);
+        container.innerHTML = '<div class="error-message">❌ Error: ' + error.message + '</div>';
+    }
+}
     </script>
 </body>
 </html>
