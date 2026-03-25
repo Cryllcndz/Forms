@@ -767,39 +767,91 @@
         margin: 10px 0 6px !important;
     }
 }
-/* 📱 FIX: SIGNATURE AREA (REMOVE SCROLL) */
-@media screen and (max-width: 768px) {
+/* General container for the form */
+.form-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;           /* konting padding sa gilid */
+    box-sizing: border-box;   /* kasama ang padding sa width */
+}
 
-    .signature-section,
-    .signature-container,
+/* All input fields */
+.form-container input,
+.form-container textarea,
+.form-container select {
+    width: 100%;              /* full width ng parent container */
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-bottom: 12px;      /* spacing between fields */
+    font-size: 16px;          /* readable sa mobile */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Labels above inputs */
+.form-container label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Signature section */
+.signature-section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;         /* auto-wrap kung maliit ang screen */
+    gap: 10px;               /* space between signatures */
+    margin-bottom: 20px;
+}
+
+.signature-wrapper {
+    flex: 1 1 48%;           /* flexible, max 2 per row sa mobile */
+    min-width: 200px;        /* hindi masyadong maliit */
+}
+
+/* Photo section */
+.photo-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.photo-section img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #003c8f;
+    border-radius: 4px;
+}
+
+/* Buttons */
+.form-container button {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    background: #003c8f;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Responsive adjustments for small screens */
+@media screen and (max-width: 480px) {
     .signature-wrapper {
-        overflow-x: hidden !important;
-        width: 100%;
+        flex: 1 1 100%;        /* single column on small phones */
     }
-
-    .signature-table {
-        width: 100% !important;
-        min-width: unset !important;
-        table-layout: fixed;
-    }
-
-    .signature-table td {
-        width: 50%;
-        text-align: center;
-        word-break: break-word;
-    }
-
-    /* signature line */
-    .signature-line {
-        width: 100%;
-        border-bottom: 1px solid #000;
-        margin: 10px 0;
-    }
-
-    /* name under signature */
-    .signature-name {
-        font-size: 13px;
-        white-space: normal;
+    .form-container input,
+    .form-container textarea,
+    .form-container select,
+    .form-container button {
+        font-size: 14px;
+        padding: 8px;
     }
 }
 </style>
