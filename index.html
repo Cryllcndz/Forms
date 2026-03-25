@@ -524,19 +524,19 @@
                 <table class="info-table">
                     <tr>
                         <td>EMPLOYER NAME:</td>
-                        <td><input type="text" id="employerName" placeholder="Enter employer name"></td>
+                        <td><input type="text" id="employerName" placeholder="Enter employer name" class="text-only-input"></td>
                     </tr>
                     <tr>
                         <td>EMPLOYER ID NO.:</td>
-                        <td><input type="text" id="employerId" placeholder="00-0000000-0"></td>
+                        <td><input type="text" id="employerId" placeholder="00-0000000-0" class="id-number-input"></td>
                     </tr>
                     <tr>
                         <td>ADDRESS:</td>
-                        <td><input type="text" id="address" placeholder="Complete address"></td>
+                        <td><input type="text" id="address" placeholder="Complete address" class="address-input"></td>
                     </tr>
                     <tr>
                         <td>TELEPHONE NO.:</td>
-                        <td><input type="text" id="telephone" placeholder="+63 XXX XXX XXXX"></td>
+                        <td><input type="text" id="telephone" placeholder="+63 XXX XXX XXXX" class="phone-input"></td>
                     </tr>
                 </table>
             </div>
@@ -556,7 +556,7 @@
     </fieldset>
 
     <div class="authorization-text">
-        <p>This is to certify that Mr./Ms. <input type="text" class="inline-input" id="certName" placeholder="Full Name"> with SS # <input type="text" class="inline-input" id="ssNumber" placeholder="00-0000000-0"> whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company's employees.</p>
+        <p>This is to certify that Mr./Ms. <input type="text" class="inline-input text-only-input" id="certName" placeholder="Full Name"> with SS # <input type="text" class="inline-input ss-number-input" id="ssNumber" placeholder="00-0000000-0"> whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company's employees.</p>
         <br>
         <p>This Certification shall be valid within one (1) year from the date of issuance unless otherwise revoked and the SSS Eastwood Branch duly notified.</p>
     </div>
@@ -574,7 +574,7 @@
                 <button type="button" class="sign-btn" onclick="openModal('specimenSignature1')">Sign</button>
                 <button type="button" class="clear-btn" onclick="clearCanvas('specimenSignature1')">Clear</button>
             </div>
-            <input type="text" class="name-input" id="specimenName1" placeholder="Type full name">
+            <input type="text" class="name-input text-only-input" id="specimenName1" placeholder="Type full name">
             <div id="specimenError1" class="error-message">Signature and name are required</div>
         </div>
 
@@ -588,7 +588,7 @@
                 <button type="button" class="sign-btn" onclick="openModal('employerSignature')">Sign</button>
                 <button type="button" class="clear-btn" onclick="clearCanvas('employerSignature')">Clear</button>
             </div>
-            <input type="text" class="name-input" id="employerName2" placeholder="Type full name of Employer/Owner">
+            <input type="text" class="name-input text-only-input" id="employerName2" placeholder="Type full name of Employer/Owner">
             <div id="employerError" class="error-message">Signature and name are required</div>
         </div>
     </div>
@@ -653,6 +653,94 @@
 </div>
 
 <script>
+    // Input validation functions
+    function validateTextOnly(input) {
+        input.value = input.value.replace(/[^a-zA-Z\s\.\-\'\,\(\)]/g, '');
+    }
+    
+    function validateNumbersOnly(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+    
+    function validateIDNumber(input) {
+        // Allows numbers and hyphens only
+        input.value = input.value.replace(/[^0-9\-]/g, '');
+        // Auto-format: max 2 digits, hyphen, 7 digits, hyphen, 1 digit
+        let val = input.value.replace(/-/g, '');
+        if (val.length > 0) {
+            if (val.length <= 2) {
+                input.value = val;
+            } else if (val.length <= 9) {
+                input.value = val.slice(0, 2) + '-' + val.slice(2);
+            } else {
+                input.value = val.slice(0, 2) + '-' + val.slice(2, 9) + '-' + val.slice(9, 10);
+            }
+        }
+    }
+    
+    function validateSSNumber(input) {
+        // Allows numbers and hyphens only
+        input.value = input.value.replace(/[^0-9\-]/g, '');
+        // Auto-format: 00-0000000-0 format
+        let val = input.value.replace(/-/g, '');
+        if (val.length > 0) {
+            if (val.length <= 2) {
+                input.value = val;
+            } else if (val.length <= 9) {
+                input.value = val.slice(0, 2) + '-' + val.slice(2);
+            } else {
+                input.value = val.slice(0, 2) + '-' + val.slice(2, 9) + '-' + val.slice(9, 10);
+            }
+        }
+    }
+    
+    function validatePhoneNumber(input) {
+        // Allows numbers, plus sign, spaces, and hyphens
+        input.value = input.value.replace(/[^0-9\+\-\s]/g, '');
+        // Limit to max 15 characters
+        if (input.value.length > 15) {
+            input.value = input.value.slice(0, 15);
+        }
+    }
+    
+    function validateAddress(input) {
+        // Allows letters, numbers, spaces, and common address characters
+        input.value = input.value.replace(/[^a-zA-Z0-9\s\.\-\#\,\/\(\)]/g, '');
+    }
+    
+    // Apply validation to inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        // Text-only inputs (names)
+        const textInputs = document.querySelectorAll('.text-only-input');
+        textInputs.forEach(input => {
+            input.addEventListener('input', function() { validateTextOnly(this); });
+        });
+        
+        // ID Number input
+        const idInput = document.getElementById('employerId');
+        if (idInput) {
+            idInput.addEventListener('input', function() { validateIDNumber(this); });
+        }
+        
+        // SS Number input
+        const ssInput = document.getElementById('ssNumber');
+        if (ssInput) {
+            ssInput.addEventListener('input', function() { validateSSNumber(this); });
+        }
+        
+        // Phone number input
+        const phoneInput = document.getElementById('telephone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function() { validatePhoneNumber(this); });
+        }
+        
+        // Address input
+        const addressInput = document.getElementById('address');
+        if (addressInput) {
+            addressInput.addEventListener('input', function() { validateAddress(this); });
+        }
+    });
+    
     // Photo upload functionality - single button only
     const photoBox = document.getElementById('photoBox');
     const photoInput = document.getElementById('photoInput');
