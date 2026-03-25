@@ -298,32 +298,6 @@
             background: white !important;
         }
 
-        /* Photo upload button styling - single button only */
-        .photo-upload-wrapper {
-            text-align: center;
-            margin-top: 10px;
-        }
-        
-        .photo-upload-label {
-            display: inline-block;
-            background: #6c757d;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: normal;
-        }
-        
-        .photo-upload-label:hover {
-            background: #5a6268;
-        }
-
-        /* Hide the default file input */
-        .photo-input {
-            display: none;
-        }
-
         /* ===== MOBILE LAYOUT FIXES - ADDED ONLY ===== */
         @media (max-width: 768px) {
             body {
@@ -524,19 +498,19 @@
                 <table class="info-table">
                     <tr>
                         <td>EMPLOYER NAME:</td>
-                        <td><input type="text" id="employerName" placeholder="Enter employer name" class="text-only-input"></td>
+                        <td><input type="text" id="employerName" placeholder="Enter employer name"></td>
                     </tr>
                     <tr>
                         <td>EMPLOYER ID NO.:</td>
-                        <td><input type="text" id="employerId" placeholder="00-0000000-0" class="id-number-input"></td>
+                        <td><input type="text" id="employerId" placeholder="00-0000000-0"></td>
                     </tr>
                     <tr>
                         <td>ADDRESS:</td>
-                        <td><input type="text" id="address" placeholder="Complete address" class="address-input"></td>
+                        <td><input type="text" id="address" placeholder="Complete address"></td>
                     </tr>
                     <tr>
                         <td>TELEPHONE NO.:</td>
-                        <td><input type="text" id="telephone" placeholder="+63 XXX XXX XXXX" class="phone-input"></td>
+                        <td><input type="text" id="telephone" placeholder="+63 XXX XXX XXXX"></td>
                     </tr>
                 </table>
             </div>
@@ -544,19 +518,20 @@
                 <div class="photo-label">PHOTO 1x1</div>
                 <div class="photo-box" id="photoBox">
                     <img id="photoPreview" class="photo-preview" src="#">
-                    <div class="photo-placeholder" id="photoPlaceholder"><i>📷</i><span>No image</span></div>
+                    <div class="photo-placeholder" id="photoPlaceholder"><i>📷</i><span></span></div>
                 </div>
-                <div class="photo-upload-wrapper">
-                    <label class="photo-upload-label" id="photoUploadLabel">Choose File</label>
-                </div>
-                <input type="file" id="photoInput" class="photo-input" accept="image/*">
-                <div id="photoError" class="error-message">Please upload a 1x1 photo</div>
+<input type="file" id="photoInput" class="photo-input" accept="image/*" hidden>
+
+<button type="button" onclick="document.getElementById('photoInput').click()" 
+style="margin-top:5px; padding:5px 10px; border-radius:6px; border:none; background:#003c8f; color:white; cursor:pointer;">
+    Upload Photo
+</button>                <div id="photoError" class="error-message">Please upload a 1x1 photo</div>
             </div>
         </div>
     </fieldset>
 
     <div class="authorization-text">
-        <p>This is to certify that Mr./Ms. <input type="text" class="inline-input text-only-input" id="certName" placeholder="Full Name"> with SS # <input type="text" class="inline-input ss-number-input" id="ssNumber" placeholder="00-0000000-0"> whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company's employees.</p>
+        <p>This is to certify that Mr./Ms. <input type="text" class="inline-input" id="certName" placeholder="Full Name"> with SS # <input type="text" class="inline-input" id="ssNumber" placeholder="00-0000000-0"> whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company's employees.</p>
         <br>
         <p>This Certification shall be valid within one (1) year from the date of issuance unless otherwise revoked and the SSS Eastwood Branch duly notified.</p>
     </div>
@@ -574,7 +549,7 @@
                 <button type="button" class="sign-btn" onclick="openModal('specimenSignature1')">Sign</button>
                 <button type="button" class="clear-btn" onclick="clearCanvas('specimenSignature1')">Clear</button>
             </div>
-            <input type="text" class="name-input text-only-input" id="specimenName1" placeholder="Type full name">
+            <input type="text" class="name-input" id="specimenName1" placeholder="Type full name">
             <div id="specimenError1" class="error-message">Signature and name are required</div>
         </div>
 
@@ -588,7 +563,7 @@
                 <button type="button" class="sign-btn" onclick="openModal('employerSignature')">Sign</button>
                 <button type="button" class="clear-btn" onclick="clearCanvas('employerSignature')">Clear</button>
             </div>
-            <input type="text" class="name-input text-only-input" id="employerName2" placeholder="Type full name of Employer/Owner">
+            <input type="text" class="name-input" id="employerName2" placeholder="Type full name of Employer/Owner">
             <div id="employerError" class="error-message">Signature and name are required</div>
         </div>
     </div>
@@ -652,131 +627,6 @@
     </div>
 </div>
 
-<script>
-    // Input validation functions
-    function validateTextOnly(input) {
-        input.value = input.value.replace(/[^a-zA-Z\s\.\-\'\,\(\)]/g, '');
-    }
-    
-    function validateNumbersOnly(input) {
-        input.value = input.value.replace(/[^0-9]/g, '');
-    }
-    
-    function validateIDNumber(input) {
-        // Allows numbers and hyphens only
-        input.value = input.value.replace(/[^0-9\-]/g, '');
-        // Auto-format: max 2 digits, hyphen, 7 digits, hyphen, 1 digit
-        let val = input.value.replace(/-/g, '');
-        if (val.length > 0) {
-            if (val.length <= 2) {
-                input.value = val;
-            } else if (val.length <= 9) {
-                input.value = val.slice(0, 2) + '-' + val.slice(2);
-            } else {
-                input.value = val.slice(0, 2) + '-' + val.slice(2, 9) + '-' + val.slice(9, 10);
-            }
-        }
-    }
-    
-    function validateSSNumber(input) {
-        // Allows numbers and hyphens only
-        input.value = input.value.replace(/[^0-9\-]/g, '');
-        // Auto-format: 00-0000000-0 format
-        let val = input.value.replace(/-/g, '');
-        if (val.length > 0) {
-            if (val.length <= 2) {
-                input.value = val;
-            } else if (val.length <= 9) {
-                input.value = val.slice(0, 2) + '-' + val.slice(2);
-            } else {
-                input.value = val.slice(0, 2) + '-' + val.slice(2, 9) + '-' + val.slice(9, 10);
-            }
-        }
-    }
-    
-    function validatePhoneNumber(input) {
-        // Allows numbers, plus sign, spaces, and hyphens
-        input.value = input.value.replace(/[^0-9\+\-\s]/g, '');
-        // Limit to max 15 characters
-        if (input.value.length > 15) {
-            input.value = input.value.slice(0, 15);
-        }
-    }
-    
-    function validateAddress(input) {
-        // Allows letters, numbers, spaces, and common address characters
-        input.value = input.value.replace(/[^a-zA-Z0-9\s\.\-\#\,\/\(\)]/g, '');
-    }
-    
-    // Apply validation to inputs
-    document.addEventListener('DOMContentLoaded', function() {
-        // Text-only inputs (names)
-        const textInputs = document.querySelectorAll('.text-only-input');
-        textInputs.forEach(input => {
-            input.addEventListener('input', function() { validateTextOnly(this); });
-        });
-        
-        // ID Number input
-        const idInput = document.getElementById('employerId');
-        if (idInput) {
-            idInput.addEventListener('input', function() { validateIDNumber(this); });
-        }
-        
-        // SS Number input
-        const ssInput = document.getElementById('ssNumber');
-        if (ssInput) {
-            ssInput.addEventListener('input', function() { validateSSNumber(this); });
-        }
-        
-        // Phone number input
-        const phoneInput = document.getElementById('telephone');
-        if (phoneInput) {
-            phoneInput.addEventListener('input', function() { validatePhoneNumber(this); });
-        }
-        
-        // Address input
-        const addressInput = document.getElementById('address');
-        if (addressInput) {
-            addressInput.addEventListener('input', function() { validateAddress(this); });
-        }
-    });
-    
-    // Photo upload functionality - single button only
-    const photoBox = document.getElementById('photoBox');
-    const photoInput = document.getElementById('photoInput');
-    const photoUploadLabel = document.getElementById('photoUploadLabel');
-    const photoPreview = document.getElementById('photoPreview');
-    const photoPlaceholder = document.getElementById('photoPlaceholder');
-    const photoError = document.getElementById('photoError');
-
-    function openFilePicker() {
-        photoInput.click();
-    }
-
-    // Only the button opens file picker (removed photoBox click)
-    photoUploadLabel.addEventListener('click', openFilePicker);
-
-    photoInput.addEventListener('change', function(e) {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                photoPreview.src = ev.target.result;
-                photoPreview.style.display = 'block';
-                photoPlaceholder.style.display = 'none';
-                photoError.style.display = 'none';
-                localStorage.setItem('employerPhoto', ev.target.result);
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    });
-    
-    const savedPhoto = localStorage.getItem('employerPhoto');
-    if (savedPhoto) {
-        photoPreview.src = savedPhoto;
-        photoPreview.style.display = 'block';
-        photoPlaceholder.style.display = 'none';
-    }
-</script>
 <script src="index.js"></script>
 </body>
 </html>
