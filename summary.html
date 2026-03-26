@@ -367,49 +367,262 @@ body {
     margin-top: 10px;
 }
 
-/* RESPONSIVE */
+/* MOBILE - COMPANY REPRESENTATIVE AUTHORIZATION CARD */
 @media screen and (max-width: 768px) {
+    
+    /* Company info section */
     .company-info-section {
         flex-direction: column;
         gap: 15px;
+        align-items: center;
     }
+    
+    /* Employer info table */
+    .company-info-section > div:first-child {
+        overflow-x: auto;
+        width: 100%;
+    }
+    
+    .company-info-section table {
+        min-width: 400px;
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .company-info-section td {
+        padding: 8px 10px;
+        font-size: 12px;
+        border: 1px solid #003c8f;
+    }
+    
+    .company-info-section td:first-child {
+        background: #003c8f;
+        color: white;
+        font-weight: 600;
+        width: 140px;
+        white-space: nowrap;
+    }
+    
+    .company-info-section td:last-child {
+        background: white;
+        color: #1a2c3e;
+        word-break: break-word;
+    }
+    
+    /* Photo - CENTERED */
     .photo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         width: 100%;
-        max-width: 150px;
-        margin: 0 auto;
+        margin: 5px 0;
     }
+    
     .photo-frame {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        border: 2px solid #003c8f;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f0f0f0;
+    }
+    
+    .photo-label {
+        font-size: 11px;
+        text-align: center;
+        margin-bottom: 6px;
+    }
+    
+    /* Certification text */
+    .certification-text {
+        font-size: 11px;
+        padding: 12px;
+        margin: 12px 0;
+        line-height: 1.5;
+    }
+    
+    /* Signatures */
+    .signature-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin: 12px 0;
+    }
+    
+    .signature-box {
+        padding: 12px;
         width: 100%;
-        max-width: 150px;
-        height: auto;
+    }
+    
+    .signature-img {
+        max-height: 50px;
+    }
+    
+    /* Noted section */
+    .noted-section {
+        margin-top: 15px;
+        padding: 12px;
+    }
+    
+    .noted-line {
+        width: 150px;
+        margin: 5px auto;
     }
 }
 
+/* EXTRA SMALL PHONES */
 @media screen and (max-width: 480px) {
-    .signature-grid {
-        grid-template-columns: 1fr !important;
-        gap: 15px;
+    
+    .company-info-section table {
+        min-width: 350px;
     }
-
-    .signature-wrapper {
-        flex: 1 1 100%;
+    
+    .company-info-section td {
+        padding: 6px 8px;
+        font-size: 11px;
     }
-
-    .form-container input,
-    .form-container textarea,
-    .form-container select,
-    .form-container button {
-        font-size: 14px;
-        padding: 8px;
+    
+    .company-info-section td:first-child {
+        width: 120px;
+        font-size: 10px;
     }
-
-    .photo-container {
-        max-width: 120px;
-    }
-
+    
     .photo-frame {
-        max-width: 120px;
-        max-height: 120px;
+        width: 85px;
+        height: 85px;
+    }
+    
+    .photo-label {
+        font-size: 10px;
+    }
+    
+    .certification-text {
+        font-size: 10px;
+        padding: 10px;
+    }
+    
+    .certification-text p {
+        margin-bottom: 6px;
+    }
+    
+    /* Signatures */
+    .signature-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin: 12px 0;
+    }
+    
+    .signature-box {
+        padding: 12px;
+        width: 100%;
+    }
+    
+    .signature-box h4 {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .signature-img {
+        max-height: 50px;
+        margin: 6px auto;
+    }
+    
+    .signature-name {
+        font-size: 11px;
+        padding: 5px;
+    }
+    
+    /* Noted section */
+    .noted-section {
+        margin-top: 15px;
+        padding: 12px;
+    }
+    
+    .noted-label {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+    
+    .noted-line {
+        width: 150px;
+        margin: 5px auto;
+    }
+    
+    .noted-name {
+        font-size: 13px;
+        margin-top: 5px;
+    }
+    
+    .noted-title {
+        font-size: 10px;
+    }
+}
+
+/* EXTRA SMALL PHONES */
+@media screen and (max-width: 480px) {
+    
+    /* Employer info table */
+    .company-info-section table {
+        min-width: 350px;
+    }
+    
+    .company-info-section td {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+    
+    .company-info-section td:first-child {
+        width: 120px;
+        font-size: 10px;
+    }
+    
+    .company-info-section td:last-child {
+        font-size: 11px;
+    }
+    
+    /* Photo */
+    .photo-frame {
+        width: 85px;
+        height: 85px;
+    }
+    
+    .photo-label {
+        font-size: 10px;
+    }
+    
+    /* Certification text */
+    .certification-text {
+        font-size: 10px;
+        padding: 10px;
+    }
+    
+    /* Signatures */
+    .signature-box h4 {
+        font-size: 11px;
+    }
+    
+    .signature-img {
+        max-height: 45px;
+    }
+    
+    .signature-name {
+        font-size: 10px;
+    }
+    
+    /* Noted section */
+    .noted-name {
+        font-size: 12px;
+    }
+    
+    .noted-title {
+        font-size: 9px;
+    }
+    
+    .noted-line {
+        width: 120px;
     }
 }
 </style>
@@ -508,13 +721,11 @@ body {
         html += '</div>';
         html += '</div>';
         
-        // Certification text
         html += '<div class="certification-text">';
         html += '<p>This is to certify that Mr./Ms. <strong>' + (data.certName || 'N/A') + '</strong> with SS # <strong>' + (data.ssNumber || 'N/A') + '</strong>, whose specimen signatures / initials appear below, is authorized to transact, verify and file Employer Data Change Request (R-8), Employer Registration Form (R-1), Employment Report (R-1A) and Member Data Change Request (E-4) of herein company\'s employees.</p>';
         html += '<p>This Certification shall be valid within one (1) year from the date of issuance unless otherwise revoked and the SSS Eastwood Branch duly notified.</p>';
         html += '</div>';
         
-        // Signatures
         html += '<div class="signature-grid">';
         if (data.specimenSignature1) {
             html += '<div class="signature-box">';
@@ -532,7 +743,6 @@ body {
         }
         html += '</div>';
         
-        // Noted by
         html += '<div class="noted-section">';
         html += '<div class="noted-label">Noted by:</div>';
         html += '<div class="noted-line"></div>';
@@ -542,11 +752,9 @@ body {
         
         html += '</div></div>';
         
-        // FORM 2 - SPECIMEN SIGNATURE CARD
         html += '<div class="form-card">';
         html += '<div class="card-body">';
         
-        // Republic header
         html += '<div class="republic-header">';
         html += '<div class="logo-container">';
         html += '<img src="republic-of-the-philippines-social-security-system-logo-png_seeklogo.png" alt="SSS Logo" onerror="this.style.display=\'none\';">';
@@ -558,12 +766,10 @@ body {
         html += '</div>';
         html += '</div>';
         
-        // Form title below header
         html += '<div class="form-title">';
         html += '<h2>SPECIMEN SIGNATURE CARD</h2>';
         html += '</div>';
         
-        // Employer info - FIXED: maayos na display
         html += '<table class="info-table">';
         html += '<tr>';
         html += '<td style="width: 180px; background: #f8f9ff; font-weight: 600; color: #003c8f;">Registered Employer Name:</td>';
@@ -583,7 +789,6 @@ body {
         html += '</tr>';
         html += '</table>';
         
-        // Officials table
         html += '<h3 style="color:#003c8f; margin:20px 0 12px; text-align:center;">Authorized Officials</h3>';
         html += '<div style="overflow-x: auto; width: 100%;">';
         html += '<table class="officials-table" style="width: 100%; border-collapse: collapse;">';
@@ -623,7 +828,6 @@ body {
         html += '</table>';
         html += '</div>';
         
-        // Granting section
         if (data.grantingName || data.grantingSignature) {
             html += '<div class="granting-section">';
             html += '<div class="granting-title">Name and official capacity of person granting authority</div>';
@@ -642,7 +846,6 @@ body {
         
         html += '</div></div>';
         
-        // Timestamp
         if (data.timestamp) {
             html += '<div class="timestamp">Generated: ' + new Date(data.timestamp).toLocaleString() + '</div>';
         }
